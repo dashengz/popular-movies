@@ -1,0 +1,24 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Sorting -->
+    <!-- Label for the sorting preference [CHAR LIMIT=30] -->
+    <string name="pref_sorting_label">Sort By</string>
+
+    <!-- Label for popularity option in sorting preference [CHAR LIMIT=25] -->
+    <string name="pref_sorting_label_popularity">Popularity</string>
+
+    <!-- Label for rating option in sorting preference [CHAR LIMIT=25] -->
+    <string name="pref_sorting_label_rating">Rating</string>
+
+    <!-- Key name for sorting preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_sorting_key" translatable="false">sorting</string>
+
+    <!-- Value in SharedPreferences for sorting by popularity option [CHAR LIMIT=NONE] -->
+    <string name="pref_sorting_popularity" translatable="false">popularity.desc</string>
+
+    <!-- Value in SharedPreferences for sorting by rating option [CHAR LIMIT=NONE] -->
+    <string name="pref_sorting_rating" translatable="false">vote_average.desc</string>
+</resources>

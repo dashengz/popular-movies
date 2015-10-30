@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Sorting Setting: Select by popularity or rating -->
+    <!-- entryValues: user-invisible (only for the logic of the app [values in SharedPreference])-->
+    <!-- entries: user-visible (the real thing user see [labels])-->
+    <ListPreference
+        android:defaultValue="@string/pref_sorting_popularity"
+        android:entries="@array/pref_sorting_options"
+        android:entryValues="@array/pref_sorting_values"
+        android:key="@string/pref_sorting_key"
+        android:title="@string/pref_sorting_label" />
+
+</PreferenceScreen>
