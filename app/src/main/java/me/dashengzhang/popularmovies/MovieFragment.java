@@ -48,13 +48,6 @@ public class MovieFragment extends Fragment {
     public final int DATE_POSITION = 3;
     public final int POSTER_PATH_POSITION = 4;
     public final int VOTE_POSITION = 5;
-    // Add your API_KEY here
-    final String API_KEY = "d921bda62c88018eb5942c8e20af3646";
-    // poster
-    final String IMG_URL_BASE = "http://image.tmdb.org/t/p/";
-    // Change the vote_count restriction for the rating sorting option (to filter unpopular movies)
-    String voteCount = "1000";
-    String imgSize = "w185";
     // rating decimal setting: one decimal place -> 100.0; two -> 1000.0, etc.
     double decimal = 100.0;
     mMovieImgAdapter adapter;
@@ -211,7 +204,7 @@ public class MovieFragment extends Fragment {
                 String overview = movieObject.getString(TMD_OVERVIEW);
                 String date = movieObject.getString(TMD_RELEASE_DATE);
                 // poster path
-                String path = IMG_URL_BASE + imgSize + movieObject.getString(TMD_POSTER_PATH);
+                String path = getResources().getString(R.string.img_url_base) + getResources().getString(R.string.img_size) + movieObject.getString(TMD_POSTER_PATH);
                 // round with one decimal places
                 double voteRaw = movieObject.getDouble(TMD_VOTE_AVERAGE);
                 voteRaw = Math.round(voteRaw * decimal) / decimal;
@@ -263,7 +256,7 @@ public class MovieFragment extends Fragment {
                     // params[0] is the first element of the received input array -> sortBy;
                     Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
-                            .appendQueryParameter(KEY_PARAM, API_KEY)
+                            .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
                             .build();
 
                     URL url = new URL(builtUri.toString());
@@ -331,8 +324,8 @@ public class MovieFragment extends Fragment {
                     // params[0] is the first element of the received input array -> sortBy;
                     Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
-                            .appendQueryParameter(COUNT_PARAM, voteCount)
-                            .appendQueryParameter(KEY_PARAM, API_KEY)
+                            .appendQueryParameter(COUNT_PARAM, getResources().getString(R.string.vote_count))
+                            .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
                             .build();
 
                     URL url = new URL(builtUri.toString());

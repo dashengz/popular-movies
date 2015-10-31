@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
+    <string name="api_key"></string>
+    <string name="img_url_base">http://image.tmdb.org/t/p/</string>
+    <string name="img_size">w185</string>
+    <string name="vote_count">1000</string>
+    <string name="vote_format">0.0</string>
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">Popular Movies</string>
     <string name="title_activity_detail">Movie Details</string>
