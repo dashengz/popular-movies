@@ -147,7 +147,6 @@ public class MovieFragment extends Fragment {
         }
 
         public int getCount() {
-
             return mMovieInfo.size();
         }
 
@@ -172,6 +171,7 @@ public class MovieFragment extends Fragment {
                     .load(mMovieInfo.get(position).toArrayList().get(POSTER_PATH_POSITION))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
+                    .fit()
                     .into(imageView);
 
             return imageView;
