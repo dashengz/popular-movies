@@ -40,16 +40,9 @@ public class MovieFragment extends Fragment {
     public static final String INTENT_MOVIE_DATE = "movieDate";
     public static final String INTENT_MOVIE_POSTER_PATH = "moviePosterPath";
     public static final String INTENT_MOVIE_VOTE = "movieVote";
-    public static final String MOVIE_KEY = "movie_key";
-    // the position of the Strings stored in the mMovieInfo ArrayList
-    // public final int ID_POSITION = 0;
-    public final int TITLE_POSITION = 1;
-    public final int OVERVIEW_POSITION = 2;
-    public final int DATE_POSITION = 3;
-    public final int POSTER_PATH_POSITION = 4;
-    public final int VOTE_POSITION = 5;
-    // rating decimal setting: one decimal place -> 100.0; two -> 1000.0, etc.
-    double decimal = 100.0;
+    public static final String POPULARITY_KEY = "popularity_key";
+    public static final String RATING_KEY = "rating_key";
+
     mMovieImgAdapter adapter;
     ArrayList<MovieInfo> mMovieInfo = new ArrayList<>();
     String sorting;
@@ -81,11 +74,14 @@ public class MovieFragment extends Fragment {
                 getString(R.string.pref_sorting_popularity));
 
         // if there's existing matching savedInstanceState then don't need to re-grab
-        if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIE_KEY)) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(POPULARITY_KEY)
+                && !savedInstanceState.containsKey(RATING_KEY)) {
             FetchMovieTask movieTask = new FetchMovieTask();
             movieTask.execute(sorting);
+        } else if (savedInstanceState.containsKey(POPULARITY_KEY)) {
+            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.POPULARITY_KEY);
         } else {
-            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.MOVIE_KEY);
+            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.RATING_KEY);
         }
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridView_movies);
@@ -96,19 +92,19 @@ public class MovieFragment extends Fragment {
                                     int position, long id) {
                 // the Strings stored in the mMovieInfo ArrayList
                 // Don't need movieId yet
-                // String movieId;
+                // long movieId;
                 String movieTitle;
                 String movieOverview;
                 String movieDate;
                 String moviePosterPath;
-                String movieVote;
+                double movieVote;
 
-                // movieId = mMovieInfo.get(position).get(ID_POSITION);
-                movieTitle = mMovieInfo.get(position).toArrayList().get(TITLE_POSITION);
-                movieOverview = mMovieInfo.get(position).toArrayList().get(OVERVIEW_POSITION);
-                movieDate = mMovieInfo.get(position).toArrayList().get(DATE_POSITION);
-                moviePosterPath = mMovieInfo.get(position).toArrayList().get(POSTER_PATH_POSITION);
-                movieVote = mMovieInfo.get(position).toArrayList().get(VOTE_POSITION);
+                // movieId = mMovieInfo.get(position).getId();
+                movieTitle = mMovieInfo.get(position).getTitle();
+                movieOverview = mMovieInfo.get(position).getOverview();
+                movieDate = mMovieInfo.get(position).getDate();
+                moviePosterPath = mMovieInfo.get(position).getPoster();
+                movieVote = mMovieInfo.get(position).getVote();
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         // .putExtra(INTENT_MOVIE_ID, movieId)
@@ -127,7 +123,11 @@ public class MovieFragment extends Fragment {
     // save parcelable to instance state
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(MOVIE_KEY, mMovieInfo);
+        if (sorting.equals(getResources().getString(R.string.pref_sorting_popularity)))
+            outState.putParcelableArrayList(POPULARITY_KEY, mMovieInfo);
+        else
+            outState.putParcelableArrayList(RATING_KEY, mMovieInfo);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -161,7 +161,7 @@ public class MovieFragment extends Fragment {
 
             // Picasso
             Picasso.with(getActivity())
-                    .load(mMovieInfo.get(position).toArrayList().get(POSTER_PATH_POSITION))
+                    .load(mMovieInfo.get(position).getPoster())
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
                     .fit()
@@ -199,16 +199,13 @@ public class MovieFragment extends Fragment {
                 // Get the JSON object representing the movie item
                 JSONObject movieObject = movieArray.getJSONObject(i);
 
-                String id = movieObject.getString(TMD_ID);
+                long id = movieObject.getLong(TMD_ID);
                 String title = movieObject.getString(TMD_ORIGINAL_TITLE);
                 String overview = movieObject.getString(TMD_OVERVIEW);
                 String date = movieObject.getString(TMD_RELEASE_DATE);
                 // poster path
                 String path = getResources().getString(R.string.img_url_base) + getResources().getString(R.string.img_size) + movieObject.getString(TMD_POSTER_PATH);
-                // round with one decimal places
-                double voteRaw = movieObject.getDouble(TMD_VOTE_AVERAGE);
-                voteRaw = Math.round(voteRaw * decimal) / decimal;
-                String vote = "" + voteRaw;
+                double vote = movieObject.getDouble(TMD_VOTE_AVERAGE);
 
                 MovieInfo movieDetail = new MovieInfo(id, title, overview, date, path, vote);
                 resultStrs.add(movieDetail);

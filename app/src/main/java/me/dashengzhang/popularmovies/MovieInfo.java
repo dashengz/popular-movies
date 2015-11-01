@@ -3,8 +3,6 @@ package me.dashengzhang.popularmovies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class MovieInfo implements Parcelable {
 
     /**
@@ -20,14 +18,15 @@ public class MovieInfo implements Parcelable {
             return new MovieInfo[size];
         }
     };
-    String id;
-    String title;
-    String overview;
-    String date;
-    String poster;
-    String vote;
 
-    public MovieInfo(String id, String title, String overview, String date, String poster, String vote) {
+    private long id;
+    private String title;
+    private String overview;
+    private String date;
+    private String poster;
+    private double vote;
+
+    public MovieInfo(long id, String title, String overview, String date, String poster, double vote) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -43,12 +42,12 @@ public class MovieInfo implements Parcelable {
      * @param in the Parcel object to read
      */
     private MovieInfo(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readLong();
         this.title = in.readString();
         this.overview = in.readString();
         this.date = in.readString();
         this.poster = in.readString();
-        this.vote = in.readString();
+        this.vote = in.readDouble();
     }
 
     public int describeContents() {
@@ -63,22 +62,35 @@ public class MovieInfo implements Parcelable {
      * @param flags the parcel options
      */
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(id);
+        out.writeLong(id);
         out.writeString(title);
         out.writeString(overview);
         out.writeString(date);
         out.writeString(poster);
-        out.writeString(vote);
+        out.writeDouble(vote);
     }
 
-    public ArrayList<String> toArrayList() {
-        ArrayList<String> movieInfoArrayList = new ArrayList<>();
-        movieInfoArrayList.add(id);
-        movieInfoArrayList.add(title);
-        movieInfoArrayList.add(overview);
-        movieInfoArrayList.add(date);
-        movieInfoArrayList.add(poster);
-        movieInfoArrayList.add(vote);
-        return movieInfoArrayList;
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public double getVote() {
+        return vote;
     }
 }

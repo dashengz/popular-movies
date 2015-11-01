@@ -47,13 +47,12 @@ public class DetailActivity extends AppCompatActivity {
 
     public static class DetailFragment extends Fragment {
 
-
         // private String movieId;
         private String movieTitle;
         private String movieOverview;
         private String movieDate;
         private String moviePosterPath;
-        private String movieVote;
+        private double movieVote;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,14 +70,13 @@ public class DetailActivity extends AppCompatActivity {
                 movieOverview = intent.getStringExtra(MovieFragment.INTENT_MOVIE_OVERVIEW);
                 movieDate = intent.getStringExtra(MovieFragment.INTENT_MOVIE_DATE);
                 moviePosterPath = intent.getStringExtra(MovieFragment.INTENT_MOVIE_POSTER_PATH);
-                movieVote = intent.getStringExtra(MovieFragment.INTENT_MOVIE_VOTE);
-                // eg. Rating: 7.8/10
-                movieVote = movieVote + "/10";
+                movieVote = intent.getDoubleExtra(MovieFragment.INTENT_MOVIE_VOTE, 0);
+                String voteDisplay = movieVote + "/10";
 
                 ((TextView) rootView.findViewById(R.id.title)).setText(movieTitle);
                 ((TextView) rootView.findViewById(R.id.overview)).setText(movieOverview);
                 ((TextView) rootView.findViewById(R.id.date)).setText(movieDate);
-                ((TextView) rootView.findViewById(R.id.rating)).setText(movieVote);
+                ((TextView) rootView.findViewById(R.id.rating)).setText(voteDisplay);
 
                 Picasso.with(getActivity())
                         .load(moviePosterPath)
