@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public class MovieFragment extends Fragment {
 
     // Intent keys
-    // public static final String INTENT_MOVIE_ID = "movieId";
+    public static final String INTENT_MOVIE_ID = "movieId";
     public static final String INTENT_MOVIE_TITLE = "movieTitle";
     public static final String INTENT_MOVIE_OVERVIEW = "movieOverview";
     public static final String INTENT_MOVIE_DATE = "movieDate";
@@ -95,15 +95,14 @@ public class MovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 // the Strings stored in the mMovieInfo ArrayList
-                // Don't need movieId yet
-                // long movieId;
+                long movieId;
                 String movieTitle;
                 String movieOverview;
                 String movieDate;
                 String moviePosterPath;
                 double movieVote;
 
-                // movieId = mMovieInfo.get(position).getId();
+                movieId = mMovieInfo.get(position).getId();
                 movieTitle = mMovieInfo.get(position).getTitle();
                 movieOverview = mMovieInfo.get(position).getOverview();
                 movieDate = mMovieInfo.get(position).getDate();
@@ -111,7 +110,7 @@ public class MovieFragment extends Fragment {
                 movieVote = mMovieInfo.get(position).getVote();
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        // .putExtra(INTENT_MOVIE_ID, movieId)
+                        .putExtra(INTENT_MOVIE_ID, movieId)
                         .putExtra(INTENT_MOVIE_TITLE, movieTitle)
                         .putExtra(INTENT_MOVIE_OVERVIEW, movieOverview)
                         .putExtra(INTENT_MOVIE_DATE, movieDate)
@@ -238,146 +237,78 @@ public class MovieFragment extends Fragment {
                     getString(R.string.pref_sorting_key),
                     getString(R.string.pref_sorting_popularity));
 
-            // sort by popularity
-            if (sortBy.equals(getString(R.string.pref_sorting_popularity))) {
+            try {
+                // Construct the URL for the query
 
-                try {
-                    // Construct the URL for the query
+                // build a URL with the params
+                Uri builtUri;
+                final String MOVIE_BASE_URL =
+                        "http://api.themoviedb.org/3/discover/movie?";
+                final String SORTING_PARAM = "sort_by";
+                final String KEY_PARAM = "api_key";
+                final String COUNT_PARAM = "vote_count.gte";
 
-                    // build a URL with the params
-                    final String MOVIE_BASE_URL =
-                            "http://api.themoviedb.org/3/discover/movie?";
-                    final String SORTING_PARAM = "sort_by";
-                    final String KEY_PARAM = "api_key";
-
-                    // params[0] is the first element of the received input array -> sortBy;
-                    Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                if (sortBy.equals(getString(R.string.pref_sorting_popularity))) {
+                    builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
                             .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
                             .build();
-
-                    URL url = new URL(builtUri.toString());
-
-                    // Create the request to TMD, and open the connection
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.connect();
-
-                    // Read the input stream into a String
-                    InputStream inputStream = urlConnection.getInputStream();
-                    StringBuffer buffer = new StringBuffer();
-                    if (inputStream == null) {
-                        return null;
-                    }
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-
-                        buffer.append(line + "\n");
-                    }
-
-                    if (buffer.length() == 0) {
-                        return null;
-                    }
-                    movieJsonStr = buffer.toString();
-
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Error ", e);
-                    return null;
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (final IOException e) {
-                            Log.e(LOG_TAG, "Error closing stream", e);
-                        }
-                    }
-                }
-
-                // try and catch errors;
-                try {
-                    return getMovieDataFromJson(movieJsonStr);
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG, e.getMessage(), e);
-                    e.printStackTrace();
-                }
-
-                // sort by ratings
-            } else if (sortBy.equals(getString(R.string.pref_sorting_rating))) {
-                try {
-                    // Construct the URL for the query
-
-                    // build a URL with the params
-                    final String MOVIE_BASE_URL =
-                            "http://api.themoviedb.org/3/discover/movie?";
-                    final String SORTING_PARAM = "sort_by";
-                    final String COUNT_PARAM = "vote_count.gte";
-                    final String KEY_PARAM = "api_key";
-
-                    // params[0] is the first element of the received input array -> sortBy;
-                    Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                } else {
+                    builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
                             .appendQueryParameter(COUNT_PARAM, getResources().getString(R.string.vote_count))
                             .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
                             .build();
+                }
 
-                    URL url = new URL(builtUri.toString());
+                URL url = new URL(builtUri.toString());
 
-                    // Create the request to TMD, and open the connection
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.connect();
+                // Create the request to TMD, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
 
-                    // Read the input stream into a String
-                    InputStream inputStream = urlConnection.getInputStream();
-                    StringBuffer buffer = new StringBuffer();
-                    if (inputStream == null) {
-                        return null;
-                    }
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-
-                        buffer.append(line + "\n");
-                    }
-
-                    if (buffer.length() == 0) {
-                        return null;
-                    }
-                    movieJsonStr = buffer.toString();
-
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Error ", e);
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
                     return null;
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (final IOException e) {
-                            Log.e(LOG_TAG, "Error closing stream", e);
-                        }
-                    }
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+
+                    buffer.append(line + "\n");
                 }
 
-                // try and catch errors;
-                try {
-                    return getMovieDataFromJson(movieJsonStr);
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG, e.getMessage(), e);
-                    e.printStackTrace();
+                if (buffer.length() == 0) {
+                    return null;
                 }
+                movieJsonStr = buffer.toString();
 
-                // error
-            } else {
-                Log.d(LOG_TAG, "Sorting type not found: " + sortBy);
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "Error ", e);
+                return null;
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(LOG_TAG, "Error closing stream", e);
+                    }
+                }
+            }
+
+            // try and catch errors;
+            try {
+                return getMovieDataFromJson(movieJsonStr);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
             }
 
             return null;
