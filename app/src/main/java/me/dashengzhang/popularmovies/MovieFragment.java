@@ -40,8 +40,7 @@ public class MovieFragment extends Fragment {
     public static final String INTENT_MOVIE_DATE = "movieDate";
     public static final String INTENT_MOVIE_POSTER_PATH = "moviePosterPath";
     public static final String INTENT_MOVIE_VOTE = "movieVote";
-    public static final String POPULARITY_KEY = "popularity_key";
-    public static final String RATING_KEY = "rating_key";
+    public static final String MOVIE_KEY = "movie_key";
 
     mMovieImgAdapter adapter;
     ArrayList<MovieInfo> mMovieInfo = new ArrayList<>();
@@ -55,12 +54,20 @@ public class MovieFragment extends Fragment {
         super.onResume();
         // if preference is changed, then re-grab info from api
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sorting = prefs.getString(getString(R.string.pref_sorting_key),
+        String newSorting = prefs.getString(getString(R.string.pref_sorting_key),
                 getString(R.string.pref_sorting_popularity));
-        if (sorting != null && !sorting.equals(this.sorting)) {
+        if (newSorting != null && sorting != null && !newSorting.equals(sorting)) {
             FetchMovieTask movieTask = new FetchMovieTask();
-            movieTask.execute(sorting);
+            movieTask.execute(newSorting);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sorting = prefs.getString(getString(R.string.pref_sorting_key),
+                getString(R.string.pref_sorting_popularity));
     }
 
     @Override
@@ -70,18 +77,15 @@ public class MovieFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sorting = prefs.getString(getString(R.string.pref_sorting_key),
+        String sorting = prefs.getString(getString(R.string.pref_sorting_key),
                 getString(R.string.pref_sorting_popularity));
 
         // if there's existing matching savedInstanceState then don't need to re-grab
-        if (savedInstanceState == null || !savedInstanceState.containsKey(POPULARITY_KEY)
-                && !savedInstanceState.containsKey(RATING_KEY)) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIE_KEY)) {
             FetchMovieTask movieTask = new FetchMovieTask();
             movieTask.execute(sorting);
-        } else if (savedInstanceState.containsKey(POPULARITY_KEY)) {
-            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.POPULARITY_KEY);
-        } else {
-            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.RATING_KEY);
+        } else if (savedInstanceState.containsKey(MOVIE_KEY)) {
+            mMovieInfo = savedInstanceState.getParcelableArrayList(MovieFragment.MOVIE_KEY);
         }
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridView_movies);
@@ -123,11 +127,7 @@ public class MovieFragment extends Fragment {
     // save parcelable to instance state
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (sorting.equals(getResources().getString(R.string.pref_sorting_popularity)))
-            outState.putParcelableArrayList(POPULARITY_KEY, mMovieInfo);
-        else
-            outState.putParcelableArrayList(RATING_KEY, mMovieInfo);
-
+        outState.putParcelableArrayList(MOVIE_KEY, mMovieInfo);
         super.onSaveInstanceState(outState);
     }
 
@@ -394,7 +394,7 @@ public class MovieFragment extends Fragment {
                 mMovieInfo.addAll(result);
 
                 // debug log
-                // Log.v(LOG_TAG, mMovieInfo.toString());
+                // Log.e(LOG_TAG, "New Pull!");
 
                 // update adapter;
                 adapter.notifyDataSetChanged();
