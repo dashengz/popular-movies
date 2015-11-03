@@ -42,9 +42,10 @@ public class MovieFragment extends Fragment {
     public static final String INTENT_MOVIE_VOTE = "movieVote";
     public static final String MOVIE_KEY = "movie_key";
 
-    mMovieImgAdapter adapter;
-    ArrayList<MovieInfo> mMovieInfo = new ArrayList<>();
-    String sorting;
+    private mMovieImgAdapter adapter;
+    private ArrayList<MovieInfo> mMovieInfo = new ArrayList<>();
+    private String sorting;
+    private String voteCount;
 
     public MovieFragment() {
     }
@@ -56,7 +57,12 @@ public class MovieFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String newSorting = prefs.getString(getString(R.string.pref_sorting_key),
                 getString(R.string.pref_sorting_popularity));
-        if (newSorting != null && sorting != null && !newSorting.equals(sorting)) {
+        String newVoteCount = prefs.getString(getString(R.string.pref_vote_count_key),
+                getString(R.string.pref_vote_count_default));
+        if (newSorting != null && sorting != null && !newSorting.equals(sorting)
+                || newVoteCount != null && voteCount != null
+                && newSorting.equals(getString(R.string.pref_sorting_rating))
+                && !newVoteCount.equals(voteCount)) {
             FetchMovieTask movieTask = new FetchMovieTask();
             movieTask.execute(newSorting);
         }
@@ -68,6 +74,8 @@ public class MovieFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sorting = prefs.getString(getString(R.string.pref_sorting_key),
                 getString(R.string.pref_sorting_popularity));
+        voteCount = prefs.getString(getString(R.string.pref_vote_count_key),
+                getString(R.string.pref_vote_count_default));
     }
 
     @Override
@@ -236,6 +244,9 @@ public class MovieFragment extends Fragment {
             String sortBy = sharedPrefs.getString(
                     getString(R.string.pref_sorting_key),
                     getString(R.string.pref_sorting_popularity));
+            String voteCount = sharedPrefs.getString(
+                    getString(R.string.pref_vote_count_key),
+                    getString(R.string.pref_vote_count_default));
 
             try {
                 // Construct the URL for the query
@@ -256,7 +267,7 @@ public class MovieFragment extends Fragment {
                 } else {
                     builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
-                            .appendQueryParameter(COUNT_PARAM, getResources().getString(R.string.vote_count))
+                            .appendQueryParameter(COUNT_PARAM, voteCount)
                             .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
                             .build();
                 }

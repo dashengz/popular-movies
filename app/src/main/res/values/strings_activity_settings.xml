@@ -21,4 +21,18 @@
 
     <!-- Value in SharedPreferences for sorting by rating option [CHAR LIMIT=NONE] -->
     <string name="pref_sorting_rating" translatable="false">vote_average.desc</string>
+
+    <!-- Vote Count -->
+    <!-- Label for the vote count preference [CHAR LIMIT=30] -->
+    <string name="pref_vote_count_label">Vote Count</string>
+
+    <!-- Summary for vote count preference [CHAR LIMIT=NONE] -->
+    <!--<string name="pref_vote_count_summary">When sorting by Rating, show movies that has at least this many vote counts.</string>-->
+
+    <!-- Key name for vote count preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_vote_count_key" translatable="false">voteCount</string>
+
+    <!-- Default vote count for rating sorting type [CHAR LIMIT=NONE] -->
+    <string name="pref_vote_count_default" translatable="false">1000</string>
+
 </resources>

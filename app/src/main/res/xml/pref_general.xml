@@ -10,4 +10,12 @@
         android:key="@string/pref_sorting_key"
         android:title="@string/pref_sorting_label" />
 
+    <EditTextPreference
+        android:defaultValue="@string/pref_vote_count_default"
+        android:inputType="number"
+        android:key="@string/pref_vote_count_key"
+        android:singleLine="true"
+        android:title="@string/pref_vote_count_label" />
+    <!--android:summary="@string/pref_vote_count_summary"-->
+
 </PreferenceScreen>
