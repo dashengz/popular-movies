@@ -10,9 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -47,7 +50,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public static class DetailFragment extends Fragment {
 
-        // private String movieId;
+        private String movieId;
         private String movieTitle;
         private String movieOverview;
         private String movieDate;
@@ -60,12 +63,43 @@ public class DetailActivity extends AppCompatActivity {
             // get the view first and then do things with it;
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+            // Review and Trailer Linear Layouts
+            LinearLayout trailerView = (LinearLayout) rootView.findViewById(R.id.trailerLinearLayout);
+
+            ArrayList<Trailer> trailers = new ArrayList<>();
+            trailers.add(new Trailer(1, "a", "Trailer 1", "key1", "Youtube"));
+            trailers.add(new Trailer(2, "b", "Trailer 2", "key2", "Youtube"));
+            trailers.add(new Trailer(3, "c", "Trailer 3", "key3", "Youtube"));
+
+            // Inflaters
+            for (Trailer trailer : trailers) {
+                View eachTrailer = inflater.inflate(R.layout.list_item_trailers, trailerView, false);
+                ((TextView) eachTrailer.findViewById(R.id.trailerNameField)).setText(trailer.getName());
+                trailerView.addView(eachTrailer);
+            }
+
+            LinearLayout reviewView = (LinearLayout) rootView.findViewById(R.id.reviewLinearLayout);
+            // need to use substrings() to make the review shorter (when displayed here)
+            // and also store the original one and display later in another activity.
+            ArrayList<Review> reviews = new ArrayList<>();
+            reviews.add(new Review(1, "a", "Author 1", "Review 1"));
+            reviews.add(new Review(2, "b", "Author 2", "Review 2"));
+            reviews.add(new Review(3, "c", "Author 3", "Review 3"));
+
+            // Inflaters
+            for (Review review : reviews) {
+                View eachReview = inflater.inflate(R.layout.list_item_reviews, reviewView, false);
+                ((TextView) eachReview.findViewById(R.id.reviewAuthorField)).setText(review.getAuthor());
+                ((TextView) eachReview.findViewById(R.id.reviewBodyField)).setText(review.getBody());
+                trailerView.addView(eachReview);
+            }
+
             // The detail Activity called via intent.  Inspect the intent for movie data.
             Intent intent = getActivity().getIntent();
 
             // continue if your intent is actually received;
             if (intent != null) {
-                // movieId = intent.getStringExtra(MovieFragment.INTENT_MOVIE_ID);
+                movieId = intent.getStringExtra(MovieFragment.INTENT_MOVIE_ID);
                 movieTitle = intent.getStringExtra(MovieFragment.INTENT_MOVIE_TITLE);
                 movieOverview = intent.getStringExtra(MovieFragment.INTENT_MOVIE_OVERVIEW);
                 movieDate = intent.getStringExtra(MovieFragment.INTENT_MOVIE_DATE);
@@ -82,6 +116,8 @@ public class DetailActivity extends AppCompatActivity {
                         .load(moviePosterPath)
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)
+                        .fit()
+                        .centerInside()
                         .into((ImageView) rootView.findViewById(R.id.poster));
             }
 

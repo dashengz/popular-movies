@@ -172,6 +172,7 @@ public class MovieFragment extends Fragment {
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
                     .fit()
+                    .centerInside()
                     .into(imageView);
 
             return imageView;
