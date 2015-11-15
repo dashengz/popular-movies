@@ -263,13 +263,13 @@ public class MovieFragment extends Fragment {
                 if (sortBy.equals(getString(R.string.pref_sorting_popularity))) {
                     builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
-                            .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
+                            .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                             .build();
                 } else {
                     builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(SORTING_PARAM, params[0])
                             .appendQueryParameter(COUNT_PARAM, voteCount)
-                            .appendQueryParameter(KEY_PARAM, getResources().getString(R.string.api_key))
+                            .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                             .build();
                 }
 
