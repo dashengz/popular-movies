@@ -35,7 +35,7 @@ public class Review implements Parcelable {
 
     /**
      * This constructor is invoked by the method createFromParcel
-     * It's used to retrieve the Movie data from the Parcel object
+     * It's used to retrieve the Review data from the Parcel object
      *
      * @param in the Parcel object to read
      */
@@ -52,7 +52,7 @@ public class Review implements Parcelable {
 
     /**
      * writeToParcel
-     * This method stores the MovieInfo data in a Parcel object
+     * This method stores the Review data in a Parcel object
      *
      * @param out   the parcel name
      * @param flags the parcel options

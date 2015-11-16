@@ -37,7 +37,7 @@ public class Trailer implements Parcelable {
 
     /**
      * This constructor is invoked by the method createFromParcel
-     * It's used to retrieve the Movie data from the Parcel object
+     * It's used to retrieve the Trailer data from the Parcel object
      *
      * @param in the Parcel object to read
      */
@@ -55,7 +55,7 @@ public class Trailer implements Parcelable {
 
     /**
      * writeToParcel
-     * This method stores the MovieInfo data in a Parcel object
+     * This method stores the Trailer data in a Parcel object
      *
      * @param out   the parcel name
      * @param flags the parcel options

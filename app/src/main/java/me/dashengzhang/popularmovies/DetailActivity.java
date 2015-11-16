@@ -50,7 +50,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public static class DetailFragment extends Fragment {
 
-        private String movieId;
+        private long movieId;
         private String movieTitle;
         private String movieOverview;
         private String movieDate;
@@ -99,12 +99,12 @@ public class DetailActivity extends AppCompatActivity {
 
             // continue if your intent is actually received;
             if (intent != null) {
-                movieId = intent.getStringExtra(MovieFragment.INTENT_MOVIE_ID);
+                movieId = intent.getLongExtra(MovieFragment.INTENT_MOVIE_ID, -1);
                 movieTitle = intent.getStringExtra(MovieFragment.INTENT_MOVIE_TITLE);
                 movieOverview = intent.getStringExtra(MovieFragment.INTENT_MOVIE_OVERVIEW);
                 movieDate = intent.getStringExtra(MovieFragment.INTENT_MOVIE_DATE);
                 moviePosterPath = intent.getStringExtra(MovieFragment.INTENT_MOVIE_POSTER_PATH);
-                movieVote = intent.getDoubleExtra(MovieFragment.INTENT_MOVIE_VOTE, 0);
+                movieVote = intent.getDoubleExtra(MovieFragment.INTENT_MOVIE_VOTE, -1);
                 String voteDisplay = movieVote + "/10";
 
                 ((TextView) rootView.findViewById(R.id.title)).setText(movieTitle);
