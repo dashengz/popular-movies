@@ -90,7 +90,7 @@ public class DetailActivity extends AppCompatActivity {
             for (Review review : reviews) {
                 View eachReview = inflater.inflate(R.layout.list_item_reviews, reviewView, false);
                 ((TextView) eachReview.findViewById(R.id.reviewAuthorField)).setText(review.getAuthor());
-                ((TextView) eachReview.findViewById(R.id.reviewBodyField)).setText(review.getBody());
+                ((TextView) eachReview.findViewById(R.id.reviewContentField)).setText(review.getContent());
                 trailerView.addView(eachReview);
             }
 

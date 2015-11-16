@@ -24,13 +24,13 @@ public class Review implements Parcelable {
     private long movieId;
     private String reviewId;
     private String author;
-    private String body;
+    private String content;
 
-    public Review(long movieId, String reviewId, String author, String body) {
+    public Review(long movieId, String reviewId, String author, String content) {
         this.movieId = movieId;
         this.reviewId = reviewId;
         this.author = author;
-        this.body = body;
+        this.content = content;
     }
 
     /**
@@ -43,7 +43,7 @@ public class Review implements Parcelable {
         this.movieId = in.readLong();
         this.reviewId = in.readString();
         this.author = in.readString();
-        this.body = in.readString();
+        this.content = in.readString();
     }
 
     public int describeContents() {
@@ -61,7 +61,7 @@ public class Review implements Parcelable {
         out.writeLong(movieId);
         out.writeString(reviewId);
         out.writeString(author);
-        out.writeString(body);
+        out.writeString(content);
     }
 
     public long getMovieId() {
@@ -76,7 +76,7 @@ public class Review implements Parcelable {
         return author;
     }
 
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 }
