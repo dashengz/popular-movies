@@ -40,6 +40,9 @@ public class MovieContract {
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_POSTER_PATH = "poster_path";
         public static final String COLUMN_VOTE = "vote";
+        public static final String COLUMN_POPULARITY = "popularity";
+        public static final String COLUMN_RATING = "rating";
+        public static final String COLUMN_FAVORITE = "favorite";
 
         // instead of saving movie_id directly in the movies table, build the url with appended movie_id
         // eg. content://me.dashengzhang.popularmovies/movies/id (actually is movie_id)
@@ -83,7 +86,6 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(PATH_MOVIES)
                     .appendPath(Long.toString(movieId)).build();
         }
-
     }
 
     /* Inner class that defines the table contents of the movie_info table */
@@ -103,6 +105,7 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_TRAILER_ID = "trailer_id";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SITE = "site";
         public static final String COLUMN_KEY = "key";
         public static final String COLUMN_TYPE = "type";
 
