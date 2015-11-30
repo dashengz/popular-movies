@@ -38,7 +38,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + ReviewEntry.TABLE_NAME + " (" +
                         ReviewEntry._ID + " INTEGER PRIMARY KEY, " +
                         ReviewEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-//                        ReviewEntry.COLUMN_REVIEW_ID + " TEXT UNIQUE NOT NULL, " +
+                        // ReviewEntry.COLUMN_REVIEW_ID + " TEXT UNIQUE NOT NULL, " +
                         ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL, " +
                         ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL, " +
                         // use on delete cascade to make sure that when the movie entry is deleted,
@@ -50,7 +50,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + TrailerEntry.TABLE_NAME + " (" +
                         TrailerEntry._ID + " INTEGER PRIMARY KEY, " +
                         TrailerEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-//                        TrailerEntry.COLUMN_TRAILER_ID + " TEXT UNIQUE NOT NULL, " +
+                        // TrailerEntry.COLUMN_TRAILER_ID + " TEXT UNIQUE NOT NULL, " +
                         TrailerEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         TrailerEntry.COLUMN_SITE + " TEXT NOT NULL, " +
                         TrailerEntry.COLUMN_KEY + " TEXT NOT NULL, " +

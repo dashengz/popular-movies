@@ -22,13 +22,16 @@ public class MovieProvider extends ContentProvider {
     static final int REVIEW_ITEM = 201;
     static final int TRAILERS_OF_MOVIE = 300;
     static final int TRAILER_ITEM = 301;
+    // The URI Matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    // table names, movie_ids
     private static final String MOVIES_TABLE = MovieContract.MovieEntry.TABLE_NAME;
     private static final String REVIEWS_TABLE = MovieContract.ReviewEntry.TABLE_NAME;
     private static final String TRAILERS_TABLE = MovieContract.TrailerEntry.TABLE_NAME;
     private static final String MOVIE_ID_IN_MOVIES = MovieContract.MovieEntry._ID;
     private static final String MOVIE_ID_IN_REVIEWS = MovieContract.ReviewEntry.COLUMN_MOVIE_ID;
     private static final String MOVIE_ID_IN_TRAILERS = MovieContract.TrailerEntry.COLUMN_MOVIE_ID;
+    // DbHelper instance
     private MovieDbHelper movieDbHelper;
 
     static UriMatcher buildUriMatcher() {
