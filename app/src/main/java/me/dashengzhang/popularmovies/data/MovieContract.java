@@ -20,7 +20,7 @@ public class MovieContract {
     public static final int MOVIE_ID_POSITION_IN_TRAILERS = 2;
     public static final int MOVIE_ID_POSITION_IN_REVIEWS = 2;
 
-    /* Inner class that defines the table contents of the movie_info table */
+    /* Inner class that defines the table contents of the movies table */
     public static final class MovieEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -45,6 +45,7 @@ public class MovieContract {
         public static final String COLUMN_FAVORITE = "favorite";
 
         // instead of saving movie_id directly in the movies table, build the url with appended movie_id
+        // movie_id is stored as _ID
         // eg. content://me.dashengzhang.popularmovies/movies/id (actually is movie_id)
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -57,7 +58,7 @@ public class MovieContract {
         }
     }
 
-    /* Inner class that defines the table contents of the movie_info table */
+    /* Inner class that defines the table contents of the reviews table */
     public static final class ReviewEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -72,7 +73,7 @@ public class MovieContract {
         public static final String TABLE_NAME = "reviews";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_REVIEW_ID = "review_id";
+        //        public static final String COLUMN_REVIEW_ID = "review_id"; // Don't really need this id, use _id instead
         public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_CONTENT = "content";
 
@@ -88,7 +89,7 @@ public class MovieContract {
         }
     }
 
-    /* Inner class that defines the table contents of the movie_info table */
+    /* Inner class that defines the table contents of the trailers table */
     public static final class TrailerEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -103,7 +104,7 @@ public class MovieContract {
         public static final String TABLE_NAME = "trailers";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_TRAILER_ID = "trailer_id";
+        //        public static final String COLUMN_TRAILER_ID = "trailer_id"; // Don't really need this id, use _id instead
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_SITE = "site";
         public static final String COLUMN_KEY = "key";

@@ -13,7 +13,6 @@ import me.dashengzhang.popularmovies.data.MovieContract.TrailerEntry;
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
     static final String DATABASE_NAME = "movie_info.db";
-    // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
 
     public MovieDbHelper(Context context) {
@@ -39,9 +38,11 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + ReviewEntry.TABLE_NAME + " (" +
                         ReviewEntry._ID + " INTEGER PRIMARY KEY, " +
                         ReviewEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                        ReviewEntry.COLUMN_REVIEW_ID + " TEXT UNIQUE NOT NULL, " +
+//                        ReviewEntry.COLUMN_REVIEW_ID + " TEXT UNIQUE NOT NULL, " +
                         ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL, " +
                         ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL, " +
+                        // use on delete cascade to make sure that when the movie entry is deleted,
+                        // the reviews of this movie will also be deleted
                         "FOREIGN KEY (" + ReviewEntry.COLUMN_MOVIE_ID + ") REFERENCES " +
                         MovieEntry.TABLE_NAME + " (" + MovieEntry._ID + " ) ON DELETE CASCADE)";
 
@@ -49,11 +50,13 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + TrailerEntry.TABLE_NAME + " (" +
                         TrailerEntry._ID + " INTEGER PRIMARY KEY, " +
                         TrailerEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                        TrailerEntry.COLUMN_TRAILER_ID + " TEXT UNIQUE NOT NULL, " +
+//                        TrailerEntry.COLUMN_TRAILER_ID + " TEXT UNIQUE NOT NULL, " +
                         TrailerEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                         TrailerEntry.COLUMN_SITE + " TEXT NOT NULL, " +
                         TrailerEntry.COLUMN_KEY + " TEXT NOT NULL, " +
                         TrailerEntry.COLUMN_TYPE + " TEXT NOT NULL, " +
+                        // use on delete cascade to make sure that when the movie entry is deleted,
+                        // the trailers of this movie will also be deleted
                         "FOREIGN KEY (" + TrailerEntry.COLUMN_MOVIE_ID + ") REFERENCES " +
                         MovieEntry.TABLE_NAME + " (" + MovieEntry._ID + " ) ON DELETE CASCADE)";
 
