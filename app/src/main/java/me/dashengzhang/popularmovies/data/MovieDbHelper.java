@@ -9,6 +9,7 @@ import me.dashengzhang.popularmovies.data.MovieContract.ReviewEntry;
 import me.dashengzhang.popularmovies.data.MovieContract.TrailerEntry;
 
 /**
+ * The SQLiteOpenHelper of the app.
  * Created by Jonathan on 11/16/15.
  */
 public class MovieDbHelper extends SQLiteOpenHelper {

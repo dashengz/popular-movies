@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
+ * The SQLite database contract of the app.
  * Created by Jonathan on 11/16/15.
  */
 public class MovieContract {

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 /**
+ * The content provider of the app.
  * Created by Jonathan on 11/16/15.
  */
 public class MovieProvider extends ContentProvider {
@@ -274,6 +275,7 @@ public class MovieProvider extends ContentProvider {
                             movieDatabase.insertOrThrow(MOVIES_TABLE, null, value);
                             returnCount++;
                         } catch (SQLException e) {
+                            // SQLException happens when there's existing movie entry that has the same id
                             // extracts movieId from the values fed in
                             String movieId = value.getAsString(MOVIE_ID_IN_MOVIES);
                             returnCount += movieDatabase.update(MOVIES_TABLE, value,
