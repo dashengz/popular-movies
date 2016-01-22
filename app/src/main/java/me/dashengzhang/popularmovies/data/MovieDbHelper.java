@@ -31,8 +31,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                         MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
                         MovieEntry.COLUMN_VOTE + " REAL NOT NULL, " +
                         MovieEntry.COLUMN_POPULARITY + " REAL, " +
-                        MovieEntry.COLUMN_RATING + " INTEGER" +
-                        MovieEntry.COLUMN_FAVORITE + " INTEGER, " +
+                        MovieEntry.COLUMN_RATING + " INTEGER, " +
+                        MovieEntry.COLUMN_FAVORITE + " INTEGER " +
                         " )";
 
         final String SQL_CREATE_REVIEW_TABLE =
