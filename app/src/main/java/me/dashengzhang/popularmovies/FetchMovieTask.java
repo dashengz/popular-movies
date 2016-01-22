@@ -32,7 +32,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     private final Context mContext;
     private String mSortBy;
     private String mVoteCount;
-    private boolean DEBUG = true;
+//    private boolean DEBUG = true;
 
     public FetchMovieTask(Context context, String sortBy, String voteCount) {
         mContext = context;
@@ -134,7 +134,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             ContentValues contentValues = new ContentValues();
             contentValues.putNull(MovieEntry.COLUMN_RATING);
             contentResolver.update(MovieEntry.CONTENT_URI, contentValues, null, null);
-
         }
 
         if (params.length == 0) {
@@ -161,6 +160,8 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             final String KEY_PARAM = "api_key";
             final String COUNT_PARAM = "vote_count.gte";
 
+//            Log.e(LOG_TAG, mSortBy);
+
             if (mSortBy.equals(mContext.getString(R.string.pref_sorting_popularity))) {
                 builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(SORTING_PARAM, params[0])
@@ -173,6 +174,8 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                         .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                         .build();
             }
+
+//            Log.e(LOG_TAG, builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -219,6 +222,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         // try and catch errors;
         try {
             getMovieDataFromJson(movieJsonStr);
+//            Log.e(LOG_TAG, "Getting data...");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
