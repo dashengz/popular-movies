@@ -34,6 +34,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.dashengzhang.popularmovies.MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.MovieProvider"
+            android:authorities="me.dashengzhang.popularmovies" />
     </application>
 
 </manifest>
