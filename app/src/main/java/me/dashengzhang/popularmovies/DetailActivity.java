@@ -1,9 +1,14 @@
 package me.dashengzhang.popularmovies;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +21,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import me.dashengzhang.popularmovies.data.MovieContract;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -48,8 +55,30 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class DetailFragment extends Fragment {
+    public static class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
+        static final int COL_MOVIE_ID = 0;
+        static final int COL_MOVIE_TITLE = 1;
+        static final int COL_MOVIE_OVERVIEW = 2;
+        static final int COL_MOVIE_DATE = 3;
+        static final int COL_MOVIE_POSTER_PATH = 4;
+        static final int COL_MOVIE_VOTE = 5;
+        static final int COL_MOVIE_POPULARITY = 6;
+        static final int COL_MOVIE_RATING = 7;
+        static final int COL_MOVIE_FAVORITE = 8;
+        private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+        private static final int DETAIL_LOADER = 0;
+        private static final String[] MOVIE_COLUMNS = {
+                MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
+                MovieContract.MovieEntry.COLUMN_TITLE,
+                MovieContract.MovieEntry.COLUMN_OVERVIEW,
+                MovieContract.MovieEntry.COLUMN_DATE,
+                MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+                MovieContract.MovieEntry.COLUMN_VOTE,
+                MovieContract.MovieEntry.COLUMN_POPULARITY,
+                MovieContract.MovieEntry.COLUMN_RATING,
+                MovieContract.MovieEntry.COLUMN_FAVORITE
+        };
         private long movieId;
         private String movieTitle;
         private String movieOverview;
@@ -94,34 +123,67 @@ public class DetailActivity extends AppCompatActivity {
                 trailerView.addView(eachReview);
             }
 
-            // The detail Activity called via intent.  Inspect the intent for movie data.
+            return rootView;
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+            super.onActivityCreated(savedInstanceState);
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Log.v(LOG_TAG, "In onCreateLoader");
             Intent intent = getActivity().getIntent();
-
-            // continue if your intent is actually received;
-            if (intent != null) {
-                movieId = intent.getLongExtra(MovieFragment.INTENT_MOVIE_ID, -1);
-                movieTitle = intent.getStringExtra(MovieFragment.INTENT_MOVIE_TITLE);
-                movieOverview = intent.getStringExtra(MovieFragment.INTENT_MOVIE_OVERVIEW);
-                movieDate = intent.getStringExtra(MovieFragment.INTENT_MOVIE_DATE);
-                moviePosterPath = intent.getStringExtra(MovieFragment.INTENT_MOVIE_POSTER_PATH);
-                movieVote = intent.getDoubleExtra(MovieFragment.INTENT_MOVIE_VOTE, -1);
-                String voteDisplay = movieVote + "/10";
-
-                ((TextView) rootView.findViewById(R.id.title)).setText(movieTitle);
-                ((TextView) rootView.findViewById(R.id.overview)).setText(movieOverview);
-                ((TextView) rootView.findViewById(R.id.date)).setText(movieDate);
-                ((TextView) rootView.findViewById(R.id.rating)).setText(voteDisplay);
-
-                Picasso.with(getActivity())
-                        .load(moviePosterPath)
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .fit()
-                        .centerInside()
-                        .into((ImageView) rootView.findViewById(R.id.poster));
+            if (intent == null) {
+                return null;
             }
 
-            return rootView;
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    intent.getData(),
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Log.v(LOG_TAG, "In onLoadFinished");
+            if (!data.moveToFirst()) {
+                return;
+            }
+
+            movieId = data.getLong(COL_MOVIE_ID);
+            movieTitle = data.getString(COL_MOVIE_TITLE);
+            movieOverview = data.getString(COL_MOVIE_OVERVIEW);
+            movieDate = data.getString(COL_MOVIE_DATE);
+            moviePosterPath = data.getString(COL_MOVIE_POSTER_PATH);
+            movieVote = data.getDouble(COL_MOVIE_VOTE);
+            String voteDisplay = movieVote + "/10";
+
+            ((TextView) getView().findViewById(R.id.title)).setText(movieTitle);
+            ((TextView) getView().findViewById(R.id.overview)).setText(movieOverview);
+            ((TextView) getView().findViewById(R.id.date)).setText(movieDate);
+            ((TextView) getView().findViewById(R.id.rating)).setText(voteDisplay);
+
+            Picasso.with(getActivity())
+                    .load(moviePosterPath)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .fit()
+                    .centerInside()
+                    .into((ImageView) getView().findViewById(R.id.poster));
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            // nothing yet
         }
     }
 }
