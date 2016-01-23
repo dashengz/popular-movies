@@ -8,7 +8,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,7 +55,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public static class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> {
-
         static final int COL_MOVIE_ID = 0;
         static final int COL_MOVIE_TITLE = 1;
         static final int COL_MOVIE_OVERVIEW = 2;
@@ -134,7 +132,6 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            Log.v(LOG_TAG, "In onCreateLoader");
             Intent intent = getActivity().getIntent();
             if (intent == null) {
                 return null;
@@ -154,7 +151,6 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.v(LOG_TAG, "In onLoadFinished");
             if (!data.moveToFirst()) {
                 return;
             }
@@ -166,6 +162,8 @@ public class DetailActivity extends AppCompatActivity {
             moviePosterPath = data.getString(COL_MOVIE_POSTER_PATH);
             movieVote = data.getDouble(COL_MOVIE_VOTE);
             String voteDisplay = movieVote + "/10";
+
+//            Log.e(LOG_TAG, String.valueOf(movieId));
 
             ((TextView) getView().findViewById(R.id.title)).setText(movieTitle);
             ((TextView) getView().findViewById(R.id.overview)).setText(movieOverview);

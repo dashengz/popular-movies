@@ -74,9 +74,10 @@ public class MovieContract {
         public static final String TABLE_NAME = "reviews";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        // public static final String COLUMN_REVIEW_ID = "review_id"; // Don't really need this id, use _id instead
+        public static final String COLUMN_REVIEW_ID = "review_id";
         public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_CONTENT = "content";
+        public static final String COLUMN_URL = "url";
 
         // eg. content://me.dashengzhang.popularmovies/reviews/id
         public static Uri buildReviewUri(long id) {
@@ -105,10 +106,10 @@ public class MovieContract {
         public static final String TABLE_NAME = "trailers";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        // public static final String COLUMN_TRAILER_ID = "trailer_id"; // Don't really need this id, use _id instead
+        public static final String COLUMN_TRAILER_ID = "trailer_id";
+        public static final String COLUMN_KEY = "key";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_SITE = "site";
-        public static final String COLUMN_KEY = "key";
         public static final String COLUMN_TYPE = "type";
 
         // eg. content://me.dashengzhang.popularmovies/trailers/id
