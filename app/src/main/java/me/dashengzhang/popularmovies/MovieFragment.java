@@ -1,10 +1,8 @@
 package me.dashengzhang.popularmovies;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -74,11 +72,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     void onPrefChanged() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String newSorting = prefs.getString(getString(R.string.pref_sorting_key),
-                getString(R.string.pref_sorting_popularity));
-        String newVoteCount = prefs.getString(getString(R.string.pref_vote_count_key),
-                getString(R.string.pref_vote_count_default));
+        String newSorting = Utility.getPreferredSorting(getActivity());
+        String newVoteCount = Utility.getPreferredVote(getActivity());
         FetchMovieTask movieTask = new FetchMovieTask(getActivity(), newSorting, newVoteCount);
         movieTask.execute(newSorting);
 
@@ -89,9 +84,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder;
         String selection;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sorting = prefs.getString(getString(R.string.pref_sorting_key),
-                getString(R.string.pref_sorting_popularity));
+        String sorting = Utility.getPreferredSorting(getActivity());
         if (sorting == null) {
             Log.e("Error", "Error loading from database.");
             return null;

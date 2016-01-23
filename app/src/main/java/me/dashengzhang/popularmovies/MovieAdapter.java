@@ -22,18 +22,33 @@ public class MovieAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_movies, parent, false);
 
+        ViewHolder holder = new ViewHolder();
+        holder.imageView = (ImageView) view.findViewById(R.id.list_item_imageView);
+
+        view.setTag(holder);
+
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ImageView imageView = (ImageView) view;
+        ViewHolder holder = (ViewHolder) view.getTag();
+
         Picasso.with(context)
                 .load(cursor.getString(MovieFragment.COL_MOVIE_POSTER_PATH))
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .fit()
-                .centerInside()
-                .into(imageView);
+                .tag(context)
+                .into(holder.imageView);
+    }
+
+    @Override
+    public int getCount() {
+        return getCursor() == null ? 0 : super.getCount();
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
     }
 }
