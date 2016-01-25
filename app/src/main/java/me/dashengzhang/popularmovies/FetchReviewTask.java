@@ -26,7 +26,7 @@ import me.dashengzhang.popularmovies.data.MovieContract.ReviewEntry;
 public class FetchReviewTask extends AsyncTask<String, Void, Void> {
 
     // Error log name; Rather than a string, use this so that when refactoring no more errors;
-    private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
+    private final String LOG_TAG = FetchReviewTask.class.getSimpleName();
 
     private final Context mContext;
     private long mMovieId;
@@ -113,7 +113,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
             final String MOVIE_BASE_URL =
                     "https://api.themoviedb.org/3/movie";
             final String MOVIE_ID = Long.toString(mMovieId);
-            final String REVIEW_PATH = "review";
+            final String REVIEW_PATH = "reviews";
             final String KEY_PARAM = "api_key";
 
             builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
@@ -121,8 +121,6 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                     .appendPath(REVIEW_PATH)
                     .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                     .build();
-
-//            Log.e(LOG_TAG, builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -169,7 +167,6 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
         // try and catch errors;
         try {
             getReviewDataFromJson(reviewJsonStr);
-//            Log.e(LOG_TAG, "Getting data...");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
