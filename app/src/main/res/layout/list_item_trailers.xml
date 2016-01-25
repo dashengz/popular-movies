@@ -5,11 +5,12 @@
     android:layout_margin="@dimen/detail_list_linear_layout_margin"
     android:orientation="horizontal">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:padding="10dp"
         android:src="@drawable/playbtn" />
 
     <TextView

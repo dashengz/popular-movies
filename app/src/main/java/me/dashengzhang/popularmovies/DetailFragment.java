@@ -12,8 +12,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +47,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final int COL_NAME = 4;
     static final int COL_SITE = 5;
     static final int COL_TYPE = 6;
+
+    static final String AUTHOR_INTENT = "author";
+    static final String CONTENT_INTENT = "content";
+
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
     private static final int TRAILER_LOADER = 1;
@@ -116,7 +122,30 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTrailerLabel = (TextView) rootView.findViewById(R.id.trailerLabel);
 
         mReviewView.setAdapter(mReviewAdapter);
+        mReviewView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                if (cursor != null && cursor.getString(COL_CONTENT).length() > 300) {
+                    Intent intent = new Intent(getActivity(), ReviewDetailActivity.class);
+                    intent.putExtra(AUTHOR_INTENT, cursor.getString(COL_AUTHOR));
+                    intent.putExtra(CONTENT_INTENT, cursor.getString(COL_CONTENT));
+                    startActivity(intent);
+                }
+            }
+        });
         mTrailerView.setAdapter(mTrailerAdapter);
+        mTrailerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                if (cursor != null && cursor.getString(COL_SITE).equalsIgnoreCase("youtube")) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + cursor.getString(COL_KEY))));
+                } else {
+                    Toast.makeText(getActivity(), "Cannot recognize this trailer", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return rootView;
     }

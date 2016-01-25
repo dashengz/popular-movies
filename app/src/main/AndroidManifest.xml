@@ -38,6 +38,15 @@
         <provider
             android:name=".data.MovieProvider"
             android:authorities="me.dashengzhang.popularmovies" />
+
+        <activity
+            android:name=".ReviewDetailActivity"
+            android:label="@string/title_activity_review_detail"
+            android:parentActivityName=".DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.dashengzhang.popularmovies.DetailActivity" />
+        </activity>
     </application>
 
 </manifest>
