@@ -14,20 +14,15 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            FetchReviewTask reviewTask = new FetchReviewTask(this, ContentUris.parseId(intent.getData()));
+            FetchTrailerTask trailerTask = new FetchTrailerTask(this, ContentUris.parseId(intent.getData()));
+            reviewTask.execute();
+            trailerTask.execute();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new DetailFragment())
                     .commit();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = getIntent();
-        FetchReviewTask reviewTask = new FetchReviewTask(this, ContentUris.parseId(intent.getData()));
-        FetchTrailerTask trailerTask = new FetchTrailerTask(this, ContentUris.parseId(intent.getData()));
-        reviewTask.execute();
-        trailerTask.execute();
     }
 
     @Override

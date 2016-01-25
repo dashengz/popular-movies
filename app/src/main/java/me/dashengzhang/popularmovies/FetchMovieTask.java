@@ -222,7 +222,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         // try and catch errors;
         try {
             getMovieDataFromJson(movieJsonStr);
-//            Log.e(LOG_TAG, "Getting data...");
+            Log.e(LOG_TAG, "Getting data...");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
