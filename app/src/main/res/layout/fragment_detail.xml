@@ -106,21 +106,31 @@
             android:text=""
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <LinearLayout
-            android:id="@+id/trailerLinearLayout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/trailerLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/detail_list_linear_layout_margin"
+            android:text="@string/detail_trailer_label"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/reviewLinearLayout"
+        <me.dashengzhang.popularmovies.ExpandedListView
+            android:id="@+id/trailerListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"></me.dashengzhang.popularmovies.ExpandedListView>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/reviewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_list_linear_layout_margin"
+            android:text="@string/detail_review_label"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <me.dashengzhang.popularmovies.ExpandedListView
+            android:id="@+id/reviewListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></me.dashengzhang.popularmovies.ExpandedListView>
 
     </LinearLayout>
 </ScrollView>

@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/detail_list_linear_layout_margin"
-    android:paddingTop="@dimen/detail_list_linear_layout_margin">
+    android:layout_margin="@dimen/detail_list_linear_layout_margin"
+    android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -15,11 +14,11 @@
 
     <TextView
         android:id="@+id/trailerNameField"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/detail_list_side_margin"
-        android:layout_marginStart="@dimen/detail_list_side_margin"
+        android:layout_margin="@dimen/detail_list_side_margin"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </LinearLayout>

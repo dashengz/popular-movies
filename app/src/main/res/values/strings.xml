@@ -12,6 +12,8 @@
     <string name="detail_date_label">Release Date:</string>
     <string name="detail_rating_label">Rating:</string>
     <string name="detail_overview_label">Overview:</string>
+    <string name="detail_trailer_label">Trailers:</string>
+    <string name="detail_review_label">Reviews:</string>
     <string name="detail_review_author_label">Author:</string>
 
     <string name="favorite">Mark as Favorite</string>
