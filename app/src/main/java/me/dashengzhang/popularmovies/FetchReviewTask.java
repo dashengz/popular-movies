@@ -166,6 +166,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
 
         // try and catch errors;
         try {
+            Log.e(LOG_TAG, "Getting reviews...");
             getReviewDataFromJson(reviewJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

@@ -59,7 +59,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
 
             for (int i = 0; i < trailerArray.length(); i++) {
 
-                // Get the JSON object representing the review item
+                // Get the JSON object representing the trailer item
                 JSONObject trailerObject = trailerArray.getJSONObject(i);
 
                 String trailerId = trailerObject.getString(TMD_TRAILER_ID);
@@ -171,8 +171,8 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
 
         // try and catch errors;
         try {
+            Log.e(LOG_TAG, "Getting trailers...");
             getTrailerDataFromJson(trailerJsonStr);
-//            Log.e(LOG_TAG, "Getting data...");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();

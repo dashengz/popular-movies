@@ -33,8 +33,8 @@ public class ReviewAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
-        holder.author.setText(cursor.getString(DetailActivity.DetailFragment.COL_AUTHOR));
-        holder.content.setText(cursor.getString(DetailActivity.DetailFragment.COL_CONTENT));
+        holder.author.setText(cursor.getString(DetailFragment.COL_AUTHOR));
+        holder.content.setText(cursor.getString(DetailFragment.COL_CONTENT));
     }
 
     @Override

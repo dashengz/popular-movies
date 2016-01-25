@@ -32,7 +32,7 @@ public class TrailerAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
-        holder.name.setText(cursor.getString(DetailActivity.DetailFragment.COL_NAME));
+        holder.name.setText(cursor.getString(DetailFragment.COL_NAME));
     }
 
     @Override
