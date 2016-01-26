@@ -87,8 +87,11 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     void onPrefChanged() {
         String newSorting = Utility.getPreferredSorting(getActivity());
         String newVoteCount = Utility.getPreferredVote(getActivity());
-        FetchMovieTask movieTask = new FetchMovieTask(getActivity(), newSorting, newVoteCount);
-        movieTask.execute(newSorting);
+        if (newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_rating))
+                || newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_popularity))) {
+            FetchMovieTask movieTask = new FetchMovieTask(getActivity(), newSorting, newVoteCount);
+            movieTask.execute(newSorting);
+        }
 
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
@@ -105,9 +108,14 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         if (sorting.equals(getString(R.string.pref_sorting_rating))) {
             sortOrder = MovieContract.MovieEntry.COLUMN_RATING + " DESC";
             selection = MovieContract.MovieEntry.COLUMN_RATING + " IS NOT NULL";
-        } else {
+        } else if (sorting.equals(getString(R.string.pref_sorting_popularity))) {
             sortOrder = MovieContract.MovieEntry.COLUMN_POPULARITY + " ASC";
             selection = MovieContract.MovieEntry.COLUMN_POPULARITY + " IS NOT NULL";
+        } else {
+            // favorite
+            // latest add shows first
+            sortOrder = MovieContract.MovieEntry.COLUMN_FAVORITE + " DESC";
+            selection = MovieContract.MovieEntry.COLUMN_FAVORITE + " IS NOT NULL";
         }
         Uri movieUri = MovieContract.MovieEntry.CONTENT_URI;
 

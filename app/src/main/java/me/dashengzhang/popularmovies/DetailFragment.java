@@ -1,6 +1,7 @@
 package me.dashengzhang.popularmovies;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,11 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 import me.dashengzhang.popularmovies.data.MovieContract;
 
@@ -106,6 +110,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private ShareActionProvider mShareActionProvider;
     private String mShare;
 
+    private Button mFavBtn;
+
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -125,6 +131,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mDate = (TextView) rootView.findViewById(R.id.date);
         mRating = (TextView) rootView.findViewById(R.id.rating);
         mPoster = (ImageView) rootView.findViewById(R.id.poster);
+        mFavBtn = (Button) rootView.findViewById(R.id.favBtn);
 
         mReviewView = (ExpandedListView) rootView.findViewById(R.id.reviewListView);
         mTrailerView = (ExpandedListView) rootView.findViewById(R.id.trailerListView);
@@ -242,7 +249,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         switch (loader.getId()) {
             case DETAIL_LOADER:
-                Long movieId = data.getLong(COL_MOVIE_ID);
+                final Long movieId = data.getLong(COL_MOVIE_ID);
                 String movieTitle = data.getString(COL_MOVIE_TITLE);
                 String movieOverview = data.getString(COL_MOVIE_OVERVIEW);
                 String movieDate = data.getString(COL_MOVIE_DATE);
@@ -262,6 +269,51 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         .fit()
                         .centerInside()
                         .into(mPoster);
+
+                boolean favorite = data.getInt(COL_MOVIE_FAVORITE) != 0;
+
+                final String favText = getActivity().getResources().getString(R.string.favorite);
+                final String removeFavText = getActivity().getResources().getString(R.string.remove_favorite);
+
+                if (!favorite) {
+                    // not fav yet
+                    // add fav
+                    mFavBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mFavBtn.setText(removeFavText);
+
+                            ContentValues movieValues = new ContentValues();
+                            int time = (int) Calendar.getInstance().getTimeInMillis() / 1000;
+                            movieValues.put(MovieContract.MovieEntry.COLUMN_FAVORITE, time);
+
+                            getActivity().getContentResolver().update(
+                                    MovieContract.MovieEntry.CONTENT_URI,
+                                    movieValues,
+                                    MovieContract.MovieEntry._ID + "=?",
+                                    new String[]{Long.toString(movieId)});
+                        }
+                    });
+                } else {
+                    mFavBtn.setText(removeFavText);
+                    // fav already
+                    // remove fav
+                    mFavBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mFavBtn.setText(favText);
+
+                            ContentValues movieValues = new ContentValues();
+                            movieValues.putNull(MovieContract.MovieEntry.COLUMN_FAVORITE);
+
+                            getActivity().getContentResolver().update(
+                                    MovieContract.MovieEntry.CONTENT_URI,
+                                    movieValues,
+                                    MovieContract.MovieEntry._ID + "=?",
+                                    new String[]{Long.toString(movieId)});
+                        }
+                    });
+                }
                 break;
             case REVIEW_LOADER:
                 mReviewAdapter.swapCursor(data);

@@ -86,7 +86,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                     // save the popularity of most popular movies into database
                     double popularity = movieObject.getDouble(TMD_POPULARITY);
                     movieValues.put(MovieEntry.COLUMN_POPULARITY, popularity);
-                } else {
+                } else if (mSortBy.equals(mContext.getString(R.string.pref_sorting_rating))) {
                     // save the rating index of highest rating movies into database
                     // int i is the index
                     movieValues.put(MovieEntry.COLUMN_RATING, i);
@@ -126,7 +126,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             ContentValues contentValues = new ContentValues();
             contentValues.putNull(MovieEntry.COLUMN_POPULARITY);
             contentResolver.update(MovieEntry.CONTENT_URI, contentValues, null, null);
-        } else {
+        } else if (mSortBy.equals(mContext.getString(R.string.pref_sorting_rating))) {
             // do the same with highest rated movies
             ContentResolver contentResolver = mContext.getContentResolver();
             String selection = MovieEntry.COLUMN_POPULARITY + " IS NULL AND " + MovieEntry.COLUMN_FAVORITE + " IS NULL";
@@ -167,12 +167,15 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                         .appendQueryParameter(SORTING_PARAM, params[0])
                         .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                         .build();
-            } else {
+            } else if (mSortBy.equals(mContext.getString(R.string.pref_sorting_rating))) {
                 builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(SORTING_PARAM, params[0])
                         .appendQueryParameter(COUNT_PARAM, mVoteCount)
                         .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                         .build();
+            } else {
+                // favorite no need to fetch
+                return null;
             }
 
 //            Log.e(LOG_TAG, builtUri.toString());

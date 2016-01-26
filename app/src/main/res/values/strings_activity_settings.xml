@@ -13,6 +13,9 @@
     <!-- Label for rating option in sorting preference [CHAR LIMIT=25] -->
     <string name="pref_sorting_label_rating">Rating</string>
 
+    <!-- Label for favorite option in sorting preference [CHAR LIMIT=25] -->
+    <string name="pref_sorting_label_favorite">Favorite</string>
+
     <!-- Key name for sorting preference in SharedPreferences [CHAR LIMIT=NONE] -->
     <string name="pref_sorting_key" translatable="false">sorting</string>
 
@@ -22,12 +25,12 @@
     <!-- Value in SharedPreferences for sorting by rating option [CHAR LIMIT=NONE] -->
     <string name="pref_sorting_rating" translatable="false">vote_average.desc</string>
 
+    <!-- Value in SharedPreferences for sorting by favorite option [CHAR LIMIT=NONE] -->
+    <string name="pref_sorting_favorite" translatable="false">favorite</string>
+
     <!-- Vote Count -->
     <!-- Label for the vote count preference [CHAR LIMIT=30] -->
     <string name="pref_vote_count_label">Vote Count</string>
-
-    <!-- Summary for vote count preference [CHAR LIMIT=NONE] -->
-    <!--<string name="pref_vote_count_summary">When sorting by Rating, show movies that has at least this many vote counts.</string>-->
 
     <!-- Key name for vote count preference in SharedPreferences [CHAR LIMIT=NONE] -->
     <string name="pref_vote_count_key" translatable="false">voteCount</string>
