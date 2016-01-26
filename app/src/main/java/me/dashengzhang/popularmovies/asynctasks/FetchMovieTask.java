@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.asynctasks;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -19,10 +19,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import me.dashengzhang.popularmovies.BuildConfig;
+import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.data.MovieContract.MovieEntry;
 
 /**
  * Created by Jonathan on 11/16/15.
+ * AsyncTask for fetching movie data from TMD
  */
 public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
@@ -225,7 +228,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         // try and catch errors;
         try {
             getMovieDataFromJson(movieJsonStr);
-            Log.e(LOG_TAG, "Getting data...");
+//            Log.e(LOG_TAG, "Getting data...");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();

@@ -1,10 +1,15 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.Utility;
+import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
+import me.dashengzhang.popularmovies.fragments.MovieFragment;
 
 public class MainActivity extends AppCompatActivity {
 

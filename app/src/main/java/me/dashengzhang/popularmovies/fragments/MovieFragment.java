@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,15 +15,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.Utility;
+import me.dashengzhang.popularmovies.activities.DetailActivity;
+import me.dashengzhang.popularmovies.adapters.MovieAdapter;
+import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
 import me.dashengzhang.popularmovies.data.MovieContract;
 
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int COL_MOVIE_POSTER_PATH = 4;
     static final int COL_MOVIE_ID = 0;
     static final int COL_MOVIE_TITLE = 1;
     static final int COL_MOVIE_OVERVIEW = 2;
     static final int COL_MOVIE_DATE = 3;
-    static final int COL_MOVIE_POSTER_PATH = 4;
     static final int COL_MOVIE_VOTE = 5;
     static final int COL_MOVIE_POPULARITY = 6;
     static final int COL_MOVIE_RATING = 7;
@@ -84,7 +89,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onActivityCreated(savedInstanceState);
     }
 
-    void onPrefChanged() {
+    public void onPrefChanged() {
         String newSorting = Utility.getPreferredSorting(getActivity());
         String newVoteCount = Utility.getPreferredVote(getActivity());
         if (newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_rating))

@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.activities;
 
 import android.content.ContentUris;
 import android.content.Intent;
@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.asynctasks.FetchReviewTask;
+import me.dashengzhang.popularmovies.asynctasks.FetchTrailerTask;
+import me.dashengzhang.popularmovies.fragments.DetailFragment;
 
 public class DetailActivity extends AppCompatActivity {
 

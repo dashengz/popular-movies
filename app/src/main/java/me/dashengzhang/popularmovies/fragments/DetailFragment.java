@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.fragments;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -28,12 +28,24 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
+import me.dashengzhang.popularmovies.ExpandedListView;
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.activities.ReviewDetailActivity;
+import me.dashengzhang.popularmovies.adapters.ReviewAdapter;
+import me.dashengzhang.popularmovies.adapters.TrailerAdapter;
 import me.dashengzhang.popularmovies.data.MovieContract;
 
 /**
  * Created by Jonathan on 1/25/16.
+ * Fragment of DetailActivity to show movie detail, reviews and trailers
+ * Include Sharing Intent and Opens YouTube app when click on trailers
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final int COL_AUTHOR = 3;
+    public static final int COL_CONTENT = 4;
+    public static final int COL_NAME = 4;
+    public static final String AUTHOR_INTENT = "author";
+    public static final String CONTENT_INTENT = "content";
     static final int COL_MOVIE_ID = 0;
     static final int COL_MOVIE_TITLE = 1;
     static final int COL_MOVIE_OVERVIEW = 2;
@@ -43,23 +55,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final int COL_MOVIE_POPULARITY = 6;
     static final int COL_MOVIE_RATING = 7;
     static final int COL_MOVIE_FAVORITE = 8;
-
     static final int COL_REVIEW_MOVIE_ID = 1;
     static final int COL_REVIEW_ID = 2;
-    static final int COL_AUTHOR = 3;
-    static final int COL_CONTENT = 4;
     static final int COL_URL = 5;
-
     static final int COL_TRAILER_MOVIE_ID = 1;
     static final int COL_TRAILER_ID = 2;
     static final int COL_KEY = 3;
-    static final int COL_NAME = 4;
     static final int COL_SITE = 5;
     static final int COL_TYPE = 6;
-
-    static final String AUTHOR_INTENT = "author";
-    static final String CONTENT_INTENT = "content";
-
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
     private static final int TRAILER_LOADER = 1;

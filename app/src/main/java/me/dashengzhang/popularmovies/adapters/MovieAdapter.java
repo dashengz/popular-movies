@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,8 +10,12 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.fragments.MovieFragment;
+
 /**
  * Created by Jonathan on 11/16/15.
+ * CursorAdapter for displaying movies in MainActivity
  */
 public class MovieAdapter extends CursorAdapter {
     public MovieAdapter(Context context, Cursor c, int flags) {

@@ -1,4 +1,4 @@
-package me.dashengzhang.popularmovies;
+package me.dashengzhang.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,8 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.fragments.DetailFragment;
+
 /**
  * Created by Jonathan on 1/24/16.
+ * CursorAdapter for displaying trailers in DetailActivity
  */
 public class TrailerAdapter extends CursorAdapter {
     public TrailerAdapter(Context context, Cursor c, int flags) {

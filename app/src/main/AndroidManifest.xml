@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,20 +19,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.dashengzhang.popularmovies.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".activities.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.dashengzhang.popularmovies.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <provider
@@ -40,12 +40,12 @@
             android:authorities="me.dashengzhang.popularmovies" />
 
         <activity
-            android:name=".ReviewDetailActivity"
+            android:name=".activities.ReviewDetailActivity"
             android:label="@string/title_activity_review_detail"
-            android:parentActivityName=".DetailActivity">
+            android:parentActivityName=".activities.DetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.dashengzhang.popularmovies.DetailActivity" />
+                android:value=".activities.DetailActivity" />
         </activity>
     </application>
 
