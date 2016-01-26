@@ -9,7 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -83,6 +88,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.TrailerEntry.COLUMN_SITE,
             MovieContract.TrailerEntry.COLUMN_TYPE
     };
+    private static final String SHARE_HASHTAG = " #PopularMoviesApp";
     private TextView mTitle;
     private TextView mOverview;
     private TextView mDate;
@@ -92,13 +98,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private ExpandedListView mTrailerView;
     private TextView mReviewLabel;
     private TextView mTrailerLabel;
-
     private Uri mMovieUri;
     private Uri mReviewUri;
     private Uri mTrailerUri;
-
     private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
+    private ShareActionProvider mShareActionProvider;
+    private String mShare;
+
+
+    public DetailFragment() {
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,6 +159,25 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_detail_fragment, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        // If onLoadFinished happens before this, set the share intent
+        if (mShare != null) {
+            mShareActionProvider.setShareIntent(createShareIntent());
+        }
+    }
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShare + SHARE_HASHTAG);
+        return shareIntent;
     }
 
     @Override
@@ -218,8 +248,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 double movieVote = data.getDouble(COL_MOVIE_VOTE);
                 String voteDisplay = movieVote + "/10";
 
-//                    Log.e(LOG_TAG, String.valueOf(movieId));
-
                 mTitle.setText(movieTitle);
                 mOverview.setText(movieOverview);
                 mDate.setText(movieDate);
@@ -243,6 +271,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 throw new UnsupportedOperationException("Unknown loader:" + loader.getId());
         }
 
+        String title = mTitle.getText().toString();
+
         if (mReviewAdapter.getCount() == 0) {
             mReviewLabel.setVisibility(View.INVISIBLE);
         } else {
@@ -250,8 +280,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         if (mTrailerAdapter.getCount() == 0) {
             mTrailerLabel.setVisibility(View.INVISIBLE);
+            // if there's no trailer, share movie name instead
+            mShare = "Let's find out more about " + title + " on";
         } else {
             mTrailerLabel.setVisibility(View.VISIBLE);
+            // if there is at least one trailer
+            Cursor cursor = (Cursor) mTrailerView.getItemAtPosition(0);
+            mShare = "Check out this trailer of " + title + " on YouTube: https://www.youtube.com/watch?v=" + cursor.getString(COL_KEY);
+        }
+
+        // If onCreateOptionsMenu has already happened, update the share intent
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(createShareIntent());
         }
     }
 
