@@ -2,6 +2,7 @@
     <string name="app_name">Popular Movies</string>
 
     <string name="img_url_base">http://image.tmdb.org/t/p/</string>
+    <string name="youtube_url_base">https://www.youtube.com/watch?v=</string>
     <string name="img_size">w185</string>
 
     <string name="action_settings">Settings</string>
@@ -18,6 +19,13 @@
     <string name="detail_review_label">Reviews:</string>
     <string name="detail_review_author_label">Author:</string>
     <string name="detail_review_read_more">Read More</string>
+
+    <string name="share_hashtag">" #PopularMoviesApp"</string>
+    <string name="share_title_1">"Let\'s find out more about "</string>
+    <string name="share_title_2">" on"</string>
+    <string name="share_trailer_1">"Check out this trailer of "</string>
+    <string name="share_trailer_2">" on YouTube: "</string>
+    <string name="toast_unrecognizable_trailer">Cannot recognize this trailer</string>
 
     <string name="favorite">Mark as Favorite</string>
     <string name="remove_favorite">Remove from Favorite</string>

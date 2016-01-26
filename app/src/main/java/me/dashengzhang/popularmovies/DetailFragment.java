@@ -88,7 +88,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.TrailerEntry.COLUMN_SITE,
             MovieContract.TrailerEntry.COLUMN_TYPE
     };
-    private static final String SHARE_HASHTAG = " #PopularMoviesApp";
+
     private TextView mTitle;
     private TextView mOverview;
     private TextView mDate;
@@ -151,9 +151,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 if (cursor != null && cursor.getString(COL_SITE).equalsIgnoreCase("youtube")) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + cursor.getString(COL_KEY))));
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(getActivity().getResources().getString(R.string.youtube_url_base)
+                                    + cursor.getString(COL_KEY))));
                 } else {
-                    Toast.makeText(getActivity(), "Cannot recognize this trailer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.toast_unrecognizable_trailer), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -176,7 +178,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mShare + SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShare + getActivity().getResources().getString(R.string.share_hashtag));
         return shareIntent;
     }
 
@@ -281,12 +283,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (mTrailerAdapter.getCount() == 0) {
             mTrailerLabel.setVisibility(View.INVISIBLE);
             // if there's no trailer, share movie name instead
-            mShare = "Let's find out more about " + title + " on";
+            mShare = getActivity().getResources().getString(R.string.share_title_1) +
+                    title +
+                    getActivity().getResources().getString(R.string.share_title_2);
         } else {
             mTrailerLabel.setVisibility(View.VISIBLE);
             // if there is at least one trailer
             Cursor cursor = (Cursor) mTrailerView.getItemAtPosition(0);
-            mShare = "Check out this trailer of " + title + " on YouTube: https://www.youtube.com/watch?v=" + cursor.getString(COL_KEY);
+            mShare = getActivity().getResources().getString(R.string.share_trailer_1) +
+                    title +
+                    getActivity().getResources().getString(R.string.share_trailer_2) +
+                    getActivity().getResources().getString(R.string.youtube_url_base) +
+                    cursor.getString(COL_KEY);
         }
 
         // If onCreateOptionsMenu has already happened, update the share intent
