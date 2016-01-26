@@ -342,11 +342,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mTrailerLabel.setVisibility(View.VISIBLE);
             // if there is at least one trailer
             Cursor cursor = (Cursor) mTrailerView.getItemAtPosition(0);
-            mShare = getActivity().getResources().getString(R.string.share_trailer_1) +
-                    title +
-                    getActivity().getResources().getString(R.string.share_trailer_2) +
-                    getActivity().getResources().getString(R.string.youtube_url_base) +
-                    cursor.getString(COL_KEY);
+            if (cursor.getString(COL_SITE).equalsIgnoreCase("youtube")) {
+                mShare = getActivity().getResources().getString(R.string.share_trailer_1) +
+                        title +
+                        getActivity().getResources().getString(R.string.share_trailer_2) +
+                        getActivity().getResources().getString(R.string.youtube_url_base) +
+                        cursor.getString(COL_KEY);
+            } else {
+                // if site is not youtube, share movie name
+                mShare = getActivity().getResources().getString(R.string.share_title_1) +
+                        title +
+                        getActivity().getResources().getString(R.string.share_title_2);
+            }
         }
 
         // If onCreateOptionsMenu has already happened, update the share intent
