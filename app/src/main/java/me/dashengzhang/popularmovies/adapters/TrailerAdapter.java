@@ -24,9 +24,7 @@ public class TrailerAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_trailers, parent, false);
 
-        ViewHolder holder = new ViewHolder();
-        holder.name = (TextView) view.findViewById(R.id.trailerNameField);
-
+        ViewHolder holder = new ViewHolder(view);
         view.setTag(holder);
 
         return view;
@@ -46,5 +44,9 @@ public class TrailerAdapter extends CursorAdapter {
 
     private static class ViewHolder {
         TextView name;
+
+        private ViewHolder(View view) {
+            name = (TextView) view.findViewById(R.id.trailerNameField);
+        }
     }
 }

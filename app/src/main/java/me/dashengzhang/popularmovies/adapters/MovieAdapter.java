@@ -26,9 +26,7 @@ public class MovieAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_movies, parent, false);
 
-        ViewHolder holder = new ViewHolder();
-        holder.imageView = (ImageView) view.findViewById(R.id.list_item_imageView);
-
+        ViewHolder holder = new ViewHolder(view);
         view.setTag(holder);
 
         return view;
@@ -54,5 +52,9 @@ public class MovieAdapter extends CursorAdapter {
 
     private static class ViewHolder {
         ImageView imageView;
+
+        private ViewHolder(View view) {
+            imageView = (ImageView) view.findViewById(R.id.list_item_imageView);
+        }
     }
 }
