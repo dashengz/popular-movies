@@ -5,4 +5,5 @@
     <dimen name="landing_page_margin">5dp</dimen>
     <dimen name="detail_list_linear_layout_margin">5dp</dimen>
     <dimen name="detail_list_side_margin">10dp</dimen>
+    <dimen name="main_grid_padding_margin">3dp</dimen>
 </resources>

@@ -2,19 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/landing_page_margin"
-    android:paddingLeft="@dimen/landing_page_margin"
-    android:paddingRight="@dimen/landing_page_margin"
-    android:paddingTop="@dimen/landing_page_margin"
+    android:padding="@dimen/main_grid_padding_margin"
     tools:context=".fragments.MovieFragment">
 
     <GridView
         android:id="@+id/gridView_movies"
+        style="@style/MovieListAndGridStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:horizontalSpacing="5dp"
-        android:numColumns="4"
-        android:verticalSpacing="5dp" />
+        android:numColumns="4" />
 
 </FrameLayout>
