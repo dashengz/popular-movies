@@ -8,9 +8,7 @@
     android:orientation="horizontal"
     tools:context=".activities.MainActivity">
 
-    <!--
-    This layout is a two-pane layout for the Items master/detail flow.
-    -->
+    <!-- Two-pane layout for main and detail -->
 
     <fragment
         android:id="@+id/fragment_movie"

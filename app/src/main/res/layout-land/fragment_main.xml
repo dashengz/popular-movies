@@ -5,6 +5,8 @@
     android:padding="@dimen/main_grid_padding_margin"
     tools:context=".fragments.MovieFragment">
 
+    <!--Landscape for phones-->
+
     <GridView
         android:id="@+id/gridView_movies"
         style="@style/MovieGridStyle"

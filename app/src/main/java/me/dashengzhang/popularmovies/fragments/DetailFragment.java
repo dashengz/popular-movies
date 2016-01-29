@@ -182,6 +182,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
+    // Inspired by Udacity course
     private Intent createShareIntent() {
         Cursor cursor = getActivity().getContentResolver().query(mTrailerUri, null, null, null, null);
         if (cursor.moveToFirst()) {

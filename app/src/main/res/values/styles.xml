@@ -1,29 +1,27 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- AppTheme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/red_700</item>
         <item name="colorPrimaryDark">@color/red_900</item>
     </style>
 
-    <!-- Main activity theme. -->
+    <!-- MainActivity -->
     <style name="MovieTheme" parent="AppTheme">
         <item name="actionBarStyle">@style/ActionBar.Solid.PopularMovies.NoTitle</item>
     </style>
 
-    <!-- Settings activity theme. -->
+    <!-- SettingsActivity -->
     <style name="SettingsTheme" parent="AppTheme"></style>
 
-    <!-- main activity action bar styles -->
+    <!-- Main ActionBar -->
     <style name="ActionBar.Solid.PopularMovies.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/ic_logo</item>
     </style>
 
     <style name="MovieGridStyle">
-        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
-        for two-pane layout -->
+        <!-- In case of a two-pane layout -->
     </style>
 
     <style name="MovieListStyle">

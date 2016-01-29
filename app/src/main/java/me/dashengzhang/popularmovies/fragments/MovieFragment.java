@@ -160,6 +160,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
      * selections.
+     *
+     * Inspired by Udacity course.
      */
     public interface Callback {
         /**

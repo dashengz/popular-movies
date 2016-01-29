@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 /**
  * Created by Jonathan on 11/16/15.
+ * Utility class for getting preference strings
  */
 public class Utility {
     public static String getPreferredSorting(Context context) {
