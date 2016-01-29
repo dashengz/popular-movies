@@ -20,6 +20,10 @@
     <string name="detail_review_author_label">Author:</string>
     <string name="detail_review_read_more">Read More</string>
 
+    <string name="movie_poster_description">This is a poster of the movie.</string>
+    <string name="detail_review_list_description">This is a review of the movie.</string>
+    <string name="detail_trailer_list_description">This is a trailer of the movie.</string>
+
     <string name="share_hashtag">" #PopularMoviesApp"</string>
     <string name="share_title_1">"Let\'s find out more about "</string>
     <string name="share_title_2">" on"</string>

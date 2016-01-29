@@ -26,6 +26,7 @@
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:contentDescription="@string/movie_poster_description"
                 android:src="@drawable/placeholder" />
 
             <LinearLayout
@@ -120,7 +121,8 @@
             android:id="@+id/trailerListView"
             style="@style/MovieListStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/detail_trailer_list_description" />
 
         <TextView
             android:id="@+id/reviewLabel"
@@ -134,7 +136,8 @@
             android:id="@+id/reviewListView"
             style="@style/MovieListStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/detail_review_list_description" />
 
     </LinearLayout>
 </ScrollView>
