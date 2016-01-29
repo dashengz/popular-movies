@@ -330,9 +330,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 break;
             case REVIEW_LOADER:
                 mReviewAdapter.swapCursor(data);
+                mReviewView.measure(0, 0);
                 break;
             case TRAILER_LOADER:
                 mTrailerAdapter.swapCursor(data);
+                mTrailerView.measure(0, 0);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader:" + loader.getId());
