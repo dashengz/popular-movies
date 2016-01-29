@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TrailerAdapter mTrailerAdapter;
     private ShareActionProvider mShareActionProvider;
     private String mShare;
+    private ScrollView mScrollView;
 
     private Button mFavBtn;
 
@@ -137,6 +139,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // get the view first and then do things with it;
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        mScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
         mTitle = (TextView) rootView.findViewById(R.id.title);
         mOverview = (TextView) rootView.findViewById(R.id.overview);
         mDate = (TextView) rootView.findViewById(R.id.date);
@@ -350,6 +353,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         } else {
             mTrailerLabel.setVisibility(View.VISIBLE);
         }
+
+        // if no data then no display
+        mScrollView.setVisibility(View.VISIBLE);
 
         // If onCreateOptionsMenu has already happened, update the share intent
         if (mShareActionProvider != null) {
