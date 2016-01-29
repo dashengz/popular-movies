@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/detail_list_linear_layout_margin"
-    android:background="@drawable/touch_selector"
+    android:background="@drawable/list_touch_selector"
     android:orientation="vertical">
 
     <LinearLayout

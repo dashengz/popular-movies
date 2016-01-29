@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="MovieListAndGridStyle">
+    <style name="MovieGridStyle">
         <item name="android:choiceMode">singleChoice</item>
     </style>
 

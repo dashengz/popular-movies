@@ -7,7 +7,7 @@
 
     <GridView
         android:id="@+id/gridView_movies"
-        style="@style/MovieListAndGridStyle"
+        style="@style/MovieGridStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

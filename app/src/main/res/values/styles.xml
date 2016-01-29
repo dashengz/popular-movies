@@ -5,9 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="MovieListAndGridStyle">
+    <style name="MovieGridStyle">
         <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
         for two-pane layout -->
+    </style>
+
+    <style name="MovieListStyle">
+        <item name="android:choiceMode">singleChoice</item>
     </style>
 
 </resources>
