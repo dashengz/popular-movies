@@ -54,15 +54,4 @@
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:id="@+id/reviewContentReadMore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/detail_list_linear_layout_margin"
-        android:text="@string/detail_review_read_more"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
-
-
 </LinearLayout>

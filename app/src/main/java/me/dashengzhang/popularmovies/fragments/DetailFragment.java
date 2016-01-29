@@ -30,7 +30,6 @@ import java.util.Calendar;
 
 import me.dashengzhang.popularmovies.ExpandedListView;
 import me.dashengzhang.popularmovies.R;
-import me.dashengzhang.popularmovies.activities.ReviewDetailActivity;
 import me.dashengzhang.popularmovies.adapters.ReviewAdapter;
 import me.dashengzhang.popularmovies.adapters.TrailerAdapter;
 import me.dashengzhang.popularmovies.data.MovieContract;
@@ -154,18 +153,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mTrailerLabel = (TextView) rootView.findViewById(R.id.trailerLabel);
 
         mReviewView.setAdapter(mReviewAdapter);
-        mReviewView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null && cursor.getString(COL_CONTENT).length() > 300) {
-                    Intent intent = new Intent(getActivity(), ReviewDetailActivity.class);
-                    intent.putExtra(AUTHOR_INTENT, cursor.getString(COL_AUTHOR));
-                    intent.putExtra(CONTENT_INTENT, cursor.getString(COL_CONTENT));
-                    startActivity(intent);
-                }
-            }
-        });
         mTrailerView.setAdapter(mTrailerAdapter);
         mTrailerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

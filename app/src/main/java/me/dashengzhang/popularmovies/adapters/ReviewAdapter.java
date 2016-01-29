@@ -35,16 +35,7 @@ public class ReviewAdapter extends CursorAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
 
         holder.author.setText(cursor.getString(DetailFragment.COL_AUTHOR));
-        String content = cursor.getString(DetailFragment.COL_CONTENT);
-        if (content.length() > 300) {
-            holder.readMore.setVisibility(View.VISIBLE);
-            String contentShort = content.substring(0, 300);
-            String contentDisplay = contentShort + " ...";
-            holder.content.setText(contentDisplay);
-        } else {
-            holder.content.setText(content);
-            holder.readMore.setVisibility(View.INVISIBLE);
-        }
+        holder.content.setText(cursor.getString(DetailFragment.COL_CONTENT));
     }
 
     @Override
@@ -55,12 +46,10 @@ public class ReviewAdapter extends CursorAdapter {
     private static class ViewHolder {
         TextView author;
         TextView content;
-        TextView readMore;
 
         private ViewHolder(View view) {
             author = (TextView) view.findViewById(R.id.reviewAuthorField);
             content = (TextView) view.findViewById(R.id.reviewContentField);
-            readMore = (TextView) view.findViewById(R.id.reviewContentReadMore);
         }
     }
 }
