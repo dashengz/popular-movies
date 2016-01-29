@@ -1,6 +1,8 @@
 package me.dashengzhang.popularmovies.activities;
 
+import android.content.ContentUris;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,29 +11,41 @@ import android.view.MenuItem;
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
 import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
+import me.dashengzhang.popularmovies.asynctasks.FetchReviewTask;
+import me.dashengzhang.popularmovies.asynctasks.FetchTrailerTask;
+import me.dashengzhang.popularmovies.data.MovieContract;
+import me.dashengzhang.popularmovies.fragments.DetailFragment;
 import me.dashengzhang.popularmovies.fragments.MovieFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieFragment.Callback {
 
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String MOVIEFRAGMENT_TAG = "MFTAG";
-
     private String mSorting;
     private String mVote;
 
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mSorting = Utility.getPreferredSorting(this);
         mVote = Utility.getPreferredVote(this);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
             FetchMovieTask fetchMovieTask = new FetchMovieTask(this, mSorting, mVote);
             fetchMovieTask.execute(mSorting);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MovieFragment(), MOVIEFRAGMENT_TAG)
-                    .commit();
         }
+
+        if (findViewById(R.id.movie_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else mTwoPane = false;
     }
 
     @Override
@@ -60,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!sorting.equals(mSorting)
                 || sorting.equals(getString(R.string.pref_sorting_rating)) && !vote.equals(mVote)) {
-            MovieFragment movieFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            MovieFragment movieFragment = (MovieFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if (null != movieFragment) {
                 movieFragment.onPrefChanged();
             }
@@ -69,4 +83,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onItemSelected(Uri movieUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            FetchReviewTask reviewTask = new FetchReviewTask(this, ContentUris.parseId(movieUri));
+            FetchTrailerTask trailerTask = new FetchTrailerTask(this, ContentUris.parseId(movieUri));
+            reviewTask.execute();
+            trailerTask.execute();
+
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, movieUri);
+            args.putParcelable(DetailFragment.DETAIL_REVIEW_URI,
+                    MovieContract.ReviewEntry.buildUriByMovieId(ContentUris.parseId(movieUri)));
+            args.putParcelable(DetailFragment.DETAIL_TRAILER_URI,
+                    MovieContract.TrailerEntry.buildUriByMovieId(ContentUris.parseId(movieUri)));
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class).setData(movieUri);
+            startActivity(intent);
+        }
+    }
 }

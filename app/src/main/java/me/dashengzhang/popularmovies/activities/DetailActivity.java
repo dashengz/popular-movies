@@ -2,6 +2,7 @@ package me.dashengzhang.popularmovies.activities;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.asynctasks.FetchReviewTask;
 import me.dashengzhang.popularmovies.asynctasks.FetchTrailerTask;
+import me.dashengzhang.popularmovies.data.MovieContract;
 import me.dashengzhang.popularmovies.fragments.DetailFragment;
 
 public class DetailActivity extends AppCompatActivity {
@@ -19,13 +21,24 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
-            Intent intent = getIntent();
-            FetchReviewTask reviewTask = new FetchReviewTask(this, ContentUris.parseId(intent.getData()));
-            FetchTrailerTask trailerTask = new FetchTrailerTask(this, ContentUris.parseId(intent.getData()));
+            Bundle arguments = new Bundle();
+            Uri movieUri = getIntent().getData();
+            FetchReviewTask reviewTask = new FetchReviewTask(this, ContentUris.parseId(movieUri));
+            FetchTrailerTask trailerTask = new FetchTrailerTask(this, ContentUris.parseId(movieUri));
             reviewTask.execute();
             trailerTask.execute();
+
+            arguments.putParcelable(DetailFragment.DETAIL_URI, movieUri);
+            arguments.putParcelable(DetailFragment.DETAIL_REVIEW_URI,
+                    MovieContract.ReviewEntry.buildUriByMovieId(ContentUris.parseId(movieUri)));
+            arguments.putParcelable(DetailFragment.DETAIL_TRAILER_URI,
+                    MovieContract.TrailerEntry.buildUriByMovieId(ContentUris.parseId(movieUri)));
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(arguments);
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailFragment())
+                    .add(R.id.movie_detail_container, fragment)
                     .commit();
         }
     }

@@ -1,6 +1,5 @@
 package me.dashengzhang.popularmovies.fragments;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -46,6 +45,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_NAME = 4;
     public static final String AUTHOR_INTENT = "author";
     public static final String CONTENT_INTENT = "content";
+    public static final String DETAIL_URI = "D_URI";
+    public static final String DETAIL_REVIEW_URI = "R_URI";
+    public static final String DETAIL_TRAILER_URI = "T_URI";
     static final int COL_MOVIE_ID = 0;
     static final int COL_MOVIE_TITLE = 1;
     static final int COL_MOVIE_OVERVIEW = 2;
@@ -95,7 +97,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.TrailerEntry.COLUMN_SITE,
             MovieContract.TrailerEntry.COLUMN_TYPE
     };
-
     private TextView mTitle;
     private TextView mOverview;
     private TextView mDate;
@@ -123,6 +124,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mMovieUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+            mReviewUri = arguments.getParcelable(DetailFragment.DETAIL_REVIEW_URI);
+            mTrailerUri = arguments.getParcelable(DetailFragment.DETAIL_TRAILER_URI);
+        }
+
         mReviewAdapter = new ReviewAdapter(getActivity(), null, 0);
         mTrailerAdapter = new TrailerAdapter(getActivity(), null, 0);
 
@@ -185,11 +193,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private Intent createShareIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mShare + getActivity().getResources().getString(R.string.share_hashtag));
-        return shareIntent;
+        Cursor cursor = getActivity().getContentResolver().query(mTrailerUri, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            mShare = getActivity().getResources().getString(R.string.share_trailer_1) +
+                    mTitle.getText().toString() +
+                    getActivity().getResources().getString(R.string.share_trailer_2) +
+                    getActivity().getResources().getString(R.string.youtube_url_base) +
+                    cursor.getString(COL_KEY);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mShare + getActivity().getResources().getString(R.string.share_hashtag));
+            return shareIntent;
+        } else return null;
     }
 
     @Override
@@ -202,46 +218,40 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null) {
-            return null;
+        if (mMovieUri != null && mReviewUri != null && mTrailerUri != null) {
+            switch (id) {
+                case DETAIL_LOADER:
+                    return new CursorLoader(
+                            getActivity(),
+                            mMovieUri,
+                            MOVIE_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                case REVIEW_LOADER:
+                    return new CursorLoader(
+                            getActivity(),
+                            mReviewUri,
+                            REVIEW_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                case TRAILER_LOADER:
+                    return new CursorLoader(
+                            getActivity(),
+                            mTrailerUri,
+                            TRAILER_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                default:
+                    throw new UnsupportedOperationException("Unknown loader:" + id);
+            }
         }
-
-        mMovieUri = intent.getData();
-        mReviewUri = MovieContract.ReviewEntry.buildUriByMovieId(ContentUris.parseId(mMovieUri));
-        mTrailerUri = MovieContract.TrailerEntry.buildUriByMovieId(ContentUris.parseId(mMovieUri));
-
-        switch (id) {
-            case DETAIL_LOADER:
-                return new CursorLoader(
-                        getActivity(),
-                        mMovieUri,
-                        MOVIE_COLUMNS,
-                        null,
-                        null,
-                        null
-                );
-            case REVIEW_LOADER:
-                return new CursorLoader(
-                        getActivity(),
-                        mReviewUri,
-                        REVIEW_COLUMNS,
-                        null,
-                        null,
-                        null
-                );
-            case TRAILER_LOADER:
-                return new CursorLoader(
-                        getActivity(),
-                        mTrailerUri,
-                        TRAILER_COLUMNS,
-                        null,
-                        null,
-                        null
-                );
-            default:
-                throw new UnsupportedOperationException("Unknown loader:" + id);
-        }
+        return null;
     }
 
     @Override
@@ -328,8 +338,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 throw new UnsupportedOperationException("Unknown loader:" + loader.getId());
         }
 
-        String title = mTitle.getText().toString();
-
         if (mReviewAdapter.getCount() == 0) {
             mReviewLabel.setVisibility(View.INVISIBLE);
         } else {
@@ -337,26 +345,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
         if (mTrailerAdapter.getCount() == 0) {
             mTrailerLabel.setVisibility(View.INVISIBLE);
-            // if there's no trailer, share movie name instead
-            mShare = getActivity().getResources().getString(R.string.share_title_1) +
-                    title +
-                    getActivity().getResources().getString(R.string.share_title_2);
         } else {
             mTrailerLabel.setVisibility(View.VISIBLE);
-            // if there is at least one trailer
-            Cursor cursor = (Cursor) mTrailerView.getItemAtPosition(0);
-            if (cursor.getString(COL_SITE).equalsIgnoreCase("youtube")) {
-                mShare = getActivity().getResources().getString(R.string.share_trailer_1) +
-                        title +
-                        getActivity().getResources().getString(R.string.share_trailer_2) +
-                        getActivity().getResources().getString(R.string.youtube_url_base) +
-                        cursor.getString(COL_KEY);
-            } else {
-                // if site is not youtube, share movie name
-                mShare = getActivity().getResources().getString(R.string.share_title_1) +
-                        title +
-                        getActivity().getResources().getString(R.string.share_title_2);
-            }
         }
 
         // If onCreateOptionsMenu has already happened, update the share intent

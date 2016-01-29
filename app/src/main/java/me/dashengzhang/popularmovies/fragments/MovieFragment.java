@@ -1,6 +1,5 @@
 package me.dashengzhang.popularmovies.fragments;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.widget.GridView;
 
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
-import me.dashengzhang.popularmovies.activities.DetailActivity;
 import me.dashengzhang.popularmovies.adapters.MovieAdapter;
 import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
 import me.dashengzhang.popularmovies.data.MovieContract;
@@ -74,8 +72,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
                     Uri onClickUri = MovieContract.MovieEntry.buildMovieUri(cursor.getLong(COL_MOVIE_ID));
-                    Intent intent = new Intent(getActivity(), DetailActivity.class).setData(onClickUri);
-                    startActivity(intent);
+                    ((Callback) getActivity()).onItemSelected(onClickUri);
                 }
             }
         });
@@ -140,5 +137,17 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mMovieAdapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        void onItemSelected(Uri movieUri);
     }
 }

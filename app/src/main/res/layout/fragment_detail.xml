@@ -116,6 +116,7 @@
 
         <me.dashengzhang.popularmovies.ExpandedListView
             android:id="@+id/trailerListView"
+            style="@style/MovieListAndGridStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></me.dashengzhang.popularmovies.ExpandedListView>
 
@@ -129,6 +130,7 @@
 
         <me.dashengzhang.popularmovies.ExpandedListView
             android:id="@+id/reviewListView"
+            style="@style/MovieListAndGridStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></me.dashengzhang.popularmovies.ExpandedListView>
 
