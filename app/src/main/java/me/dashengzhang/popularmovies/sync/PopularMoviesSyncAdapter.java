@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -311,66 +312,74 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         Context context = getContext();
         //checking the last update and notify if it' the first of the day
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String lastNotificationKey = context.getString(R.string.pref_last_notification);
-        long lastSync = prefs.getLong(lastNotificationKey, 0);
+        String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
+        boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
+                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
 
-        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
-            // Last sync was more than 1 day ago, let's send a notification with the latest hot movie.
-            Uri movieUri = MovieEntry.CONTENT_URI;
+        if (displayNotifications) {
+            String lastNotificationKey = context.getString(R.string.pref_last_notification);
+            long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-            // we'll query our contentProvider, as always
-            Cursor cursor = context.getContentResolver().query(movieUri, NOTIFY_MOVIE_PROJECTION,
-                    null, null, MovieEntry.COLUMN_POPULARITY + " ASC");
+            if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+                // Last sync was more than 1 day ago, let's send a notification with the latest hot movie.
+                Uri movieUri = MovieEntry.CONTENT_URI;
 
-            if (cursor.moveToFirst()) {
-                String movieTitle = cursor.getString(INDEX_TITLE);
-                double movieVote = cursor.getDouble(INDEX_VOTE);
+                // we'll query our contentProvider, as always
+                Cursor cursor = context.getContentResolver().query(movieUri, NOTIFY_MOVIE_PROJECTION,
+                        null, null, MovieEntry.COLUMN_POPULARITY + " ASC");
 
-                String title = context.getString(R.string.app_name);
+                if (cursor.moveToFirst()) {
+                    String movieTitle = cursor.getString(INDEX_TITLE);
+                    double movieVote = cursor.getDouble(INDEX_VOTE);
 
-                // Define the text of the forecast.
-                String contentText = String.format(context.getString(R.string.format_notification),
-                        movieTitle, movieVote + "/10");
+                    String title = context.getString(R.string.app_name);
 
-                //build your notification here.
+                    // Define the text of the forecast.
+                    String contentText = String.format(context.getString(R.string.format_notification),
+                            movieTitle, movieVote + "/10");
 
-                // NotificationCompatBuilder is a very convenient way to build backward-compatible
-                // notifications.  Just throw in some data.
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getContext())
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle(title)
-                                .setContentText(contentText);
+                    //build your notification here.
 
-                // Make something interesting happen when the user clicks on the notification.
-                // In this case, opening the app is sufficient.
-                Intent resultIntent = new Intent(context, MainActivity.class);
+                    // NotificationCompatBuilder is a very convenient way to build backward-compatible
+                    // notifications.  Just throw in some data.
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getContext())
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(),
+                                            R.mipmap.ic_launcher))
+                                    .setContentTitle(title)
+                                    .setContentText(contentText);
 
-                // The stack builder object will contain an artificial back stack for the
-                // started Activity.
-                // This ensures that navigating backward from the Activity leads out of
-                // your application to the Home screen.
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(
-                                0,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                mBuilder.setContentIntent(resultPendingIntent);
+                    // Make something interesting happen when the user clicks on the notification.
+                    // In this case, opening the app is sufficient.
+                    Intent resultIntent = new Intent(context, MainActivity.class);
 
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                // MOVIE_NOTIFICATION_ID allows you to update the notification later on.
-                mNotificationManager.notify(MOVIE_NOTIFICATION_ID, mBuilder.build());
+                    // The stack builder object will contain an artificial back stack for the
+                    // started Activity.
+                    // This ensures that navigating backward from the Activity leads out of
+                    // your application to the Home screen.
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
 
-                //refreshing last sync
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putLong(lastNotificationKey, System.currentTimeMillis());
-                editor.commit();
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    // MOVIE_NOTIFICATION_ID allows you to update the notification later on.
+                    mNotificationManager.notify(MOVIE_NOTIFICATION_ID, mBuilder.build());
+
+                    //refreshing last sync
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putLong(lastNotificationKey, System.currentTimeMillis());
+                    editor.commit();
+                }
+                cursor.close();
             }
         }
-
     }
 
     /**
