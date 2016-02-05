@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Popular Movies</string>
     <string name="sync_account_type">popularmovies.dashengzhang.me</string>
     <string name="content_authority">me.dashengzhang.popularmovies</string>
@@ -35,5 +35,9 @@
 
     <string name="favorite">Mark as Favorite</string>
     <string name="remove_favorite">Remove from Favorite</string>
+
+    <string name="format_notification"><xliff:g id="movie_name">%1$s</xliff:g> (Rating: <xliff:g id="movie_rating">%2$s</xliff:g>)</string>
+    <string name="pref_last_notification">last_notification</string>
+
 
 </resources>

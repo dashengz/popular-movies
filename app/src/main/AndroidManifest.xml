@@ -43,7 +43,7 @@
 
         <provider
             android:name=".data.MovieProvider"
-            android:authorities="me.dashengzhang.popularmovies"
+            android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
 

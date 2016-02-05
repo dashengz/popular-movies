@@ -2,14 +2,24 @@ package me.dashengzhang.popularmovies.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -27,19 +37,51 @@ import java.util.Vector;
 import me.dashengzhang.popularmovies.BuildConfig;
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
+import me.dashengzhang.popularmovies.activities.MainActivity;
 import me.dashengzhang.popularmovies.data.MovieContract.MovieEntry;
 
 /**
  * Movie Sync Adapter
  */
 public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
+    // Interval at which to sync with the api, in seconds.
+    // 60 seconds (1 minute) * 180 = 3 hours
+    public static final int SYNC_INTERVAL = 60 * 180;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final int MOVIE_NOTIFICATION_ID = 1103;
+    private static final String[] NOTIFY_MOVIE_PROJECTION = new String[]{
+            MovieEntry.COLUMN_TITLE,
+            MovieEntry.COLUMN_VOTE,
+    };
+    // these indices must match the projection
+    private static final int INDEX_TITLE = 0;
+    private static final int INDEX_VOTE = 1;
     public final String LOG_TAG = PopularMoviesSyncAdapter.class.getSimpleName();
-
     String mSortBy;
     String mVoteCount;
 
     public PopularMoviesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+    }
+
+    /**
+     * Helper method to schedule the sync adapter periodic execution
+     */
+    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+        Account account = getSyncAccount(context);
+        String authority = context.getString(R.string.content_authority);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // we can enable inexact timers in our periodic sync
+            SyncRequest request = new SyncRequest.Builder().
+                    syncPeriodic(syncInterval, flexTime).
+                    setSyncAdapter(account, authority).
+                    setExtras(new Bundle()).build();
+            ContentResolver.requestSync(request);
+        } else {
+            ContentResolver.addPeriodicSync(account,
+                    authority, new Bundle(), syncInterval);
+        }
     }
 
     /**
@@ -88,9 +130,30 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
              * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
              * here.
              */
-
+            onAccountCreated(newAccount, context);
         }
         return newAccount;
+    }
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        /*
+         * Since we've created an account
+         */
+        PopularMoviesSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        /*
+         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+         */
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+
+        /*
+         * Finally, let's do a sync to get things started
+         */
+        syncImmediately(context);
+    }
+
+    public static void initializeSyncAdapter(Context context) {
+        getSyncAccount(context);
     }
 
     @Override
@@ -234,12 +297,80 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 inserted = getContext().getContentResolver().bulkInsert(MovieEntry.CONTENT_URI, cvArray);
+
+                notifyMovie();
             }
             Log.d(LOG_TAG, "PopularMovies Sync Complete. " + inserted + " Inserted");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
+    }
+
+    private void notifyMovie() {
+        Context context = getContext();
+        //checking the last update and notify if it' the first of the day
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        long lastSync = prefs.getLong(lastNotificationKey, 0);
+
+        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+            // Last sync was more than 1 day ago, let's send a notification with the latest hot movie.
+            Uri movieUri = MovieEntry.CONTENT_URI;
+
+            // we'll query our contentProvider, as always
+            Cursor cursor = context.getContentResolver().query(movieUri, NOTIFY_MOVIE_PROJECTION,
+                    null, null, MovieEntry.COLUMN_POPULARITY + " ASC");
+
+            if (cursor.moveToFirst()) {
+                String movieTitle = cursor.getString(INDEX_TITLE);
+                double movieVote = cursor.getDouble(INDEX_VOTE);
+
+                String title = context.getString(R.string.app_name);
+
+                // Define the text of the forecast.
+                String contentText = String.format(context.getString(R.string.format_notification),
+                        movieTitle, movieVote + "/10");
+
+                //build your notification here.
+
+                // NotificationCompatBuilder is a very convenient way to build backward-compatible
+                // notifications.  Just throw in some data.
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getContext())
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle(title)
+                                .setContentText(contentText);
+
+                // Make something interesting happen when the user clicks on the notification.
+                // In this case, opening the app is sufficient.
+                Intent resultIntent = new Intent(context, MainActivity.class);
+
+                // The stack builder object will contain an artificial back stack for the
+                // started Activity.
+                // This ensures that navigating backward from the Activity leads out of
+                // your application to the Home screen.
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent =
+                        stackBuilder.getPendingIntent(
+                                0,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                mBuilder.setContentIntent(resultPendingIntent);
+
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                // MOVIE_NOTIFICATION_ID allows you to update the notification later on.
+                mNotificationManager.notify(MOVIE_NOTIFICATION_ID, mBuilder.build());
+
+                //refreshing last sync
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putLong(lastNotificationKey, System.currentTimeMillis());
+                editor.commit();
+            }
+        }
+
     }
 
     /**

@@ -10,12 +10,12 @@ import android.view.MenuItem;
 
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
-import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
 import me.dashengzhang.popularmovies.asynctasks.FetchReviewTask;
 import me.dashengzhang.popularmovies.asynctasks.FetchTrailerTask;
 import me.dashengzhang.popularmovies.data.MovieContract;
 import me.dashengzhang.popularmovies.fragments.DetailFragment;
 import me.dashengzhang.popularmovies.fragments.MovieFragment;
+import me.dashengzhang.popularmovies.sync.PopularMoviesSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements MovieFragment.Callback {
 
@@ -33,11 +33,6 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.Cal
         mVote = Utility.getPreferredVote(this);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            FetchMovieTask fetchMovieTask = new FetchMovieTask(this, mSorting, mVote);
-            fetchMovieTask.execute(mSorting);
-        }
-
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -46,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.Cal
                         .commit();
             }
         } else mTwoPane = false;
+
+        PopularMoviesSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override
