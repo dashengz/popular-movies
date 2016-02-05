@@ -107,49 +107,22 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
      * @return a fake account.
      */
     public static Account getSyncAccount(Context context) {
-        // Get an instance of the Android account manager
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-
-        // Create the account type and default account
         Account newAccount = new Account(
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
-
-        // If the password doesn't exist, the account doesn't exist
         if (null == accountManager.getPassword(newAccount)) {
-
-        /*
-         * Add the account and account type, no password or user data
-         * If successful, return the Account object, otherwise report an error.
-         */
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
-            /*
-             * If you don't set android:syncable="true" in
-             * in your <provider> element in the manifest,
-             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
-             * here.
-             */
             onAccountCreated(newAccount, context);
         }
         return newAccount;
     }
 
     private static void onAccountCreated(Account newAccount, Context context) {
-        /*
-         * Since we've created an account
-         */
         PopularMoviesSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
-
-        /*
-         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
-         */
         ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
-
-        /*
-         * Finally, let's do a sync to get things started
-         */
         syncImmediately(context);
     }
 
@@ -323,25 +296,16 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
                 // Last sync was more than 1 day ago, let's send a notification with the latest hot movie.
                 Uri movieUri = MovieEntry.CONTENT_URI;
-
-                // we'll query our contentProvider, as always
                 Cursor cursor = context.getContentResolver().query(movieUri, NOTIFY_MOVIE_PROJECTION,
                         null, null, MovieEntry.COLUMN_POPULARITY + " ASC");
-
                 if (cursor.moveToFirst()) {
                     String movieTitle = cursor.getString(INDEX_TITLE);
                     double movieVote = cursor.getDouble(INDEX_VOTE);
 
                     String title = context.getString(R.string.app_name);
-
-                    // Define the text of the forecast.
                     String contentText = String.format(context.getString(R.string.format_notification),
                             movieTitle, movieVote + "/10");
 
-                    //build your notification here.
-
-                    // NotificationCompatBuilder is a very convenient way to build backward-compatible
-                    // notifications.  Just throw in some data.
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getContext())
                                     .setSmallIcon(R.mipmap.ic_launcher)
@@ -350,8 +314,7 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                                     .setContentTitle(title)
                                     .setContentText(contentText);
 
-                    // Make something interesting happen when the user clicks on the notification.
-                    // In this case, opening the app is sufficient.
+                    // Do things when the user clicks on the notification.
                     Intent resultIntent = new Intent(context, MainActivity.class);
 
                     // The stack builder object will contain an artificial back stack for the
@@ -369,7 +332,6 @@ public class PopularMoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     NotificationManager mNotificationManager =
                             (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    // MOVIE_NOTIFICATION_ID allows you to update the notification later on.
                     mNotificationManager.notify(MOVIE_NOTIFICATION_ID, mBuilder.build());
 
                     //refreshing last sync

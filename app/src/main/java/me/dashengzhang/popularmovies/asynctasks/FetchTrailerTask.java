@@ -127,7 +127,6 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
                     .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DATABASE_API_KEY)
                     .build();
 
-//            Log.e(LOG_TAG, builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -154,10 +153,13 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
                 return null;
             }
             trailerJsonStr = buffer.toString();
-
+            getTrailerDataFromJson(trailerJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             return null;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -169,15 +171,6 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-        }
-
-        // try and catch errors;
-        try {
-//            Log.e(LOG_TAG, "Getting trailers...");
-            getTrailerDataFromJson(trailerJsonStr);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
         }
         return null;
     }

@@ -149,10 +149,14 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 return null;
             }
             reviewJsonStr = buffer.toString();
-
+            getReviewDataFromJson(reviewJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             return null;
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -164,15 +168,6 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-        }
-
-        // try and catch errors;
-        try {
-//            Log.e(LOG_TAG, "Getting reviews...");
-            getReviewDataFromJson(reviewJsonStr);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
         }
         return null;
     }

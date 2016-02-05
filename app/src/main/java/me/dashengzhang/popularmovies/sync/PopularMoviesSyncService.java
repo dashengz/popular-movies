@@ -6,7 +6,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 /**
- * Created by Jonathan on 2/4/16.
+ * PopularMoviesSyncService
  */
 public class PopularMoviesSyncService extends Service {
     private static final Object sSyncAdapterLock = new Object();
