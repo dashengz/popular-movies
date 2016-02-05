@@ -40,6 +40,7 @@
         <provider
             android:name=".data.MovieProvider"
             android:authorities="me.dashengzhang.popularmovies" />
+        <service android:name=".service.PopularMoviesService" />
     </application>
 
 </manifest>

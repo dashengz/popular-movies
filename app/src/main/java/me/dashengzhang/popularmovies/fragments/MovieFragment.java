@@ -1,5 +1,6 @@
 package me.dashengzhang.popularmovies.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.widget.GridView;
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
 import me.dashengzhang.popularmovies.adapters.MovieAdapter;
-import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
 import me.dashengzhang.popularmovies.data.MovieContract;
+import me.dashengzhang.popularmovies.service.PopularMoviesService;
 
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -95,10 +96,14 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onPrefChanged() {
         String newSorting = Utility.getPreferredSorting(getActivity());
         String newVoteCount = Utility.getPreferredVote(getActivity());
+
         if (newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_rating))
                 || newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_popularity))) {
-            FetchMovieTask movieTask = new FetchMovieTask(getActivity(), newSorting, newVoteCount);
-            movieTask.execute(newSorting);
+            Intent intent = new Intent(getActivity(), PopularMoviesService.class);
+            intent.putExtra(PopularMoviesService.SORTING_EXTRA, newSorting);
+            intent.putExtra(PopularMoviesService.VOTE_EXTRA, newVoteCount);
+
+            getActivity().startService(intent);
         }
 
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
