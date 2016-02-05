@@ -43,8 +43,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_AUTHOR = 3;
     public static final int COL_CONTENT = 4;
     public static final int COL_NAME = 4;
-    public static final String AUTHOR_INTENT = "author";
-    public static final String CONTENT_INTENT = "content";
     public static final String DETAIL_URI = "D_URI";
     public static final String DETAIL_REVIEW_URI = "R_URI";
     public static final String DETAIL_TRAILER_URI = "T_URI";

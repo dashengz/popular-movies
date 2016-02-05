@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="sync_account_type">popularmovies.dashengzhang.me</string>
+    <string name="content_authority">me.dashengzhang.popularmovies</string>
 
     <string name="img_url_base">http://image.tmdb.org/t/p/</string>
     <string name="youtube_url_base">https://www.youtube.com/watch?v=</string>

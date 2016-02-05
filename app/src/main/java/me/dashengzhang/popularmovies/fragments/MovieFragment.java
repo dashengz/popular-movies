@@ -17,8 +17,8 @@ import android.widget.GridView;
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
 import me.dashengzhang.popularmovies.adapters.MovieAdapter;
-import me.dashengzhang.popularmovies.asynctasks.FetchMovieTask;
 import me.dashengzhang.popularmovies.data.MovieContract;
+import me.dashengzhang.popularmovies.sync.PopularMoviesSyncAdapter;
 
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -97,8 +97,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         String newVoteCount = Utility.getPreferredVote(getActivity());
         if (newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_rating))
                 || newSorting.equalsIgnoreCase(getString(R.string.pref_sorting_popularity))) {
-            FetchMovieTask movieTask = new FetchMovieTask(getActivity(), newSorting, newVoteCount);
-            movieTask.execute(newSorting);
+            PopularMoviesSyncAdapter.syncImmediately(getActivity());
         }
 
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
