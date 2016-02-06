@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import me.dashengzhang.popularmovies.R;
 import me.dashengzhang.popularmovies.Utility;
@@ -44,6 +45,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
             MovieContract.MovieEntry.COLUMN_FAVORITE
     };
     private static final String SELECTED_KEY = "selected_position";
+    TextView emptyView;
     private MovieAdapter mMovieAdapter;
     private GridView mGridView;
     private int mPosition = GridView.INVALID_POSITION;
@@ -60,7 +62,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mGridView = (GridView) rootView.findViewById(R.id.gridView_movies);
-        View emptyView = rootView.findViewById(R.id.gridView_movies_empty);
+        emptyView = (TextView) rootView.findViewById(R.id.gridView_movies_empty);
         mGridView.setEmptyView(emptyView);
         mGridView.setAdapter(mMovieAdapter);
 
@@ -150,6 +152,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mPosition != GridView.INVALID_POSITION) {
             mGridView.smoothScrollToPosition(mPosition);
         }
+        Utility.updateEmptyView(getActivity(), mMovieAdapter, emptyView,
+                getActivity().getResources().getString(R.string.empty_movie_list));
     }
 
     @Override

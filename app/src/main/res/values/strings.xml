@@ -42,6 +42,7 @@
     <string name="empty_movie_list">No Movie Information Available</string>
     <string name="empty_review_list">No Review Information Available</string>
     <string name="empty_trailer_list">No Trailer Information Available</string>
+    <string name="empty_no_network">. Please connect to the Internet.</string>
 
 
 </resources>

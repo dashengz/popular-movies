@@ -30,6 +30,7 @@ import java.util.Calendar;
 
 import me.dashengzhang.popularmovies.ExpandedListView;
 import me.dashengzhang.popularmovies.R;
+import me.dashengzhang.popularmovies.Utility;
 import me.dashengzhang.popularmovies.adapters.ReviewAdapter;
 import me.dashengzhang.popularmovies.adapters.TrailerAdapter;
 import me.dashengzhang.popularmovies.data.MovieContract;
@@ -95,6 +96,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.TrailerEntry.COLUMN_SITE,
             MovieContract.TrailerEntry.COLUMN_TYPE
     };
+    TextView mEmptyRView;
+    TextView mEmptyTView;
     private TextView mTitle;
     private TextView mOverview;
     private TextView mDate;
@@ -102,8 +105,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private ImageView mPoster;
     private ExpandedListView mReviewView;
     private ExpandedListView mTrailerView;
-    private TextView mReviewLabel;
-    private TextView mTrailerLabel;
     private Uri mMovieUri;
     private Uri mReviewUri;
     private Uri mTrailerUri;
@@ -145,14 +146,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mFavBtn = (Button) rootView.findViewById(R.id.favBtn);
 
         mReviewView = (ExpandedListView) rootView.findViewById(R.id.reviewListView);
-        View emptyRView = rootView.findViewById(R.id.listView_reviews_empty);
-        mReviewView.setEmptyView(emptyRView);
+        mEmptyRView = (TextView) rootView.findViewById(R.id.listView_reviews_empty);
+        mReviewView.setEmptyView(mEmptyRView);
         mTrailerView = (ExpandedListView) rootView.findViewById(R.id.trailerListView);
-        View emptyTView = rootView.findViewById(R.id.listView_trailers_empty);
-        mTrailerView.setEmptyView(emptyTView);
-
-        mReviewLabel = (TextView) rootView.findViewById(R.id.reviewLabel);
-        mTrailerLabel = (TextView) rootView.findViewById(R.id.trailerLabel);
+        mEmptyTView = (TextView) rootView.findViewById(R.id.listView_trailers_empty);
+        mTrailerView.setEmptyView(mEmptyTView);
 
         mReviewView.setAdapter(mReviewAdapter);
         mTrailerView.setAdapter(mTrailerAdapter);
@@ -323,25 +321,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 break;
             case REVIEW_LOADER:
                 mReviewAdapter.swapCursor(data);
-                mReviewView.measure(0, 0);
                 break;
             case TRAILER_LOADER:
                 mTrailerAdapter.swapCursor(data);
-                mTrailerView.measure(0, 0);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader:" + loader.getId());
-        }
-
-        if (mReviewAdapter.getCount() == 0) {
-            mReviewLabel.setVisibility(View.INVISIBLE);
-        } else {
-            mReviewLabel.setVisibility(View.VISIBLE);
-        }
-        if (mTrailerAdapter.getCount() == 0) {
-            mTrailerLabel.setVisibility(View.INVISIBLE);
-        } else {
-            mTrailerLabel.setVisibility(View.VISIBLE);
         }
 
         // if no data then no display
@@ -351,6 +336,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareIntent());
         }
+
+        Utility.updateEmptyView(getActivity(), mReviewAdapter, mEmptyRView,
+                getActivity().getResources().getString(R.string.empty_review_list));
+        Utility.updateEmptyView(getActivity(), mTrailerAdapter, mEmptyTView,
+                getActivity().getResources().getString(R.string.empty_trailer_list));
     }
 
     @Override
