@@ -60,6 +60,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mGridView = (GridView) rootView.findViewById(R.id.gridView_movies);
+        View emptyView = rootView.findViewById(R.id.gridView_movies_empty);
+        mGridView.setEmptyView(emptyView);
         mGridView.setAdapter(mMovieAdapter);
 
         // onClick to DetailActivity

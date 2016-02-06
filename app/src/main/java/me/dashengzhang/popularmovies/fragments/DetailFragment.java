@@ -145,7 +145,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mFavBtn = (Button) rootView.findViewById(R.id.favBtn);
 
         mReviewView = (ExpandedListView) rootView.findViewById(R.id.reviewListView);
+        View emptyRView = rootView.findViewById(R.id.listView_reviews_empty);
+        mReviewView.setEmptyView(emptyRView);
         mTrailerView = (ExpandedListView) rootView.findViewById(R.id.trailerListView);
+        View emptyTView = rootView.findViewById(R.id.listView_trailers_empty);
+        mTrailerView.setEmptyView(emptyTView);
 
         mReviewLabel = (TextView) rootView.findViewById(R.id.reviewLabel);
         mTrailerLabel = (TextView) rootView.findViewById(R.id.trailerLabel);
