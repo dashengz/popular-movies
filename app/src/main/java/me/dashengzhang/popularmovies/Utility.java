@@ -29,7 +29,7 @@ public class Utility {
      * Returns true if the network is available or about to become available.
      *
      * @param c Context used to get the ConnectivityManager
-     * @return
+     * @return isNetworkAvailable?
      */
     public static boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =

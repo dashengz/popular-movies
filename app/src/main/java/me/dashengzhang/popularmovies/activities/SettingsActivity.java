@@ -52,9 +52,9 @@ public class SettingsActivity extends PreferenceActivity
                         .getString(preference.getKey(), ""));
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object value) {
+    private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
+        String key = preference.getKey();
 
         if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
@@ -65,6 +65,11 @@ public class SettingsActivity extends PreferenceActivity
         } else {
             preference.setSummary(stringValue);
         }
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        setPreferenceSummary(preference, value);
         return true;
     }
 
