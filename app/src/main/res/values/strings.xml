@@ -43,4 +43,6 @@
     <string name="empty_review_list">No Review Information Available</string>
     <string name="empty_trailer_list">No Trailer Information Available</string>
     <string name="empty_no_network">. Please connect to the Internet.</string>
+
+    <string name="gcm_movie_alert">Heads up: %1$s is the new best!</string>
 </resources>
