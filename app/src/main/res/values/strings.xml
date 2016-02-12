@@ -1,7 +1,7 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Popular Movies</string>
-    <string name="sync_account_type">popularmovies.dashengzhang.me</string>
-    <string name="content_authority">me.dashengzhang.popularmovies</string>
+    <string name="sync_account_type">popularmovies.dashengz.com</string>
+    <string name="content_authority">com.dashengz.popularmovies</string>
 
     <string name="img_url_base">http://image.tmdb.org/t/p/</string>
     <string name="youtube_url_base">https://www.youtube.com/watch?v=</string>
@@ -43,6 +43,4 @@
     <string name="empty_review_list">No Review Information Available</string>
     <string name="empty_trailer_list">No Trailer Information Available</string>
     <string name="empty_no_network">. Please connect to the Internet.</string>
-
-
 </resources>

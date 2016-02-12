@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  * Created by Jonathan on 11/16/15.
  */
 public class MovieContract {
-    public static final String CONTENT_AUTHORITY = "me.dashengzhang.popularmovies";
+    public static final String CONTENT_AUTHORITY = "com.dashengz.popularmovies";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_MOVIES = "movies";
@@ -47,7 +47,7 @@ public class MovieContract {
 
         // instead of saving movie_id directly in the movies table, build the url with appended movie_id
         // movie_id is stored as _ID
-        // eg. content://me.dashengzhang.popularmovies/movies/id (actually is movie_id)
+        // eg. content://com.dashengz.popularmovies/movies/id (actually is movie_id)
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
@@ -79,12 +79,12 @@ public class MovieContract {
         public static final String COLUMN_CONTENT = "content";
         public static final String COLUMN_URL = "url";
 
-        // eg. content://me.dashengzhang.popularmovies/reviews/id
+        // eg. content://com.dashengz.popularmovies/reviews/id
         public static Uri buildReviewUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        // eg. content://me.dashengzhang.popularmovies/reviews/movies/movie_id
+        // eg. content://com.dashengz.popularmovies/reviews/movies/movie_id
         public static Uri buildUriByMovieId(long movieId) {
             return CONTENT_URI.buildUpon().appendPath(PATH_MOVIES)
                     .appendPath(Long.toString(movieId)).build();
@@ -112,12 +112,12 @@ public class MovieContract {
         public static final String COLUMN_SITE = "site";
         public static final String COLUMN_TYPE = "type";
 
-        // eg. content://me.dashengzhang.popularmovies/trailers/id
+        // eg. content://com.dashengz.popularmovies/trailers/id
         public static Uri buildTrailerUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        // eg. content://me.dashengzhang.popularmovies/trailers/movies/movie_id
+        // eg. content://com.dashengz.popularmovies/trailers/movies/movie_id
         public static Uri buildUriByMovieId(long movieId) {
             return CONTENT_URI.buildUpon().appendPath(PATH_MOVIES)
                     .appendPath(Long.toString(movieId)).build();
