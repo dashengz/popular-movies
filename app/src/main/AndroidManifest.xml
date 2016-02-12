@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.dashengzhang.popularmovies">
+    package="com.dashengz.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.dashengz.popularmovies.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/MovieTheme">
             <intent-filter>
@@ -25,31 +25,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="com.dashengz.popularmovies.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName="com.dashengz.popularmovies.activities.MainActivity"
             android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
+                android:value="com.dashengz.popularmovies.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.DetailActivity"
+            android:name="com.dashengz.popularmovies.activities.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName="com.dashengz.popularmovies.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
+                android:value="com.dashengz.popularmovies.activities.MainActivity" />
         </activity>
 
         <provider
-            android:name=".data.MovieProvider"
+            android:name="com.dashengz.popularmovies.data.MovieProvider"
             android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".sync.PopularMoviesAuthenticatorService">
+        <service android:name="com.dashengz.popularmovies.sync.PopularMoviesAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -60,7 +60,7 @@
 
         <!-- The SyncAdapter service -->
         <service
-            android:name=".sync.PopularMoviesSyncService"
+            android:name="com.dashengz.popularmovies.sync.PopularMoviesSyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />

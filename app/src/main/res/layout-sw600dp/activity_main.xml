@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/fragment_movie"
-        android:name="me.dashengzhang.popularmovies.fragments.MovieFragment"
+        android:name="com.dashengz.popularmovies.fragments.MovieFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
