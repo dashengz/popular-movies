@@ -24,12 +24,12 @@ Include the unique API key in [Project Root Folder]/.gradle/gradle.properties
 Browse through currently popular movies via a gridlayout:
 
 <img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/home.png" width="200px" />
-<img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/detail_tablet_port.png" width="200px" />
+<img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/detail_tablet_port.png" height="333px" />
 
 Click on a poster to view the details:
 
 <img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/detail.png" width="200px" />
-<img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/detail_tablet_land.png" width="200px" />
+<img src="https://github.com/dashengz/popular-movies/blob/master/screenshots/detail_tablet_land.png" height="333px" />
 
 Three different filters available:
 
